@@ -1,0 +1,122 @@
+[
+    {
+        "title": "1984",
+        "author": "George Orwell",
+        "publicationYear": 1949,
+        "isbn": "ISBN-12345",
+        "genre": "Fiction",
+        "language": "en",
+        "rating": 4.95,
+        "price": 20.50
+    },
+    {
+        "title": "To Kill a Mockingbird",
+        "author": "Harper Lee",
+        "publicationYear": 1960,
+        "isbn": "ISBN-67890",
+        "genre": "Fiction",
+        "language": "ru",
+        "rating": 4.80,
+        "price": 18.99
+    },
+    {
+        "title": "The Great Gatsby",
+        "author": "F. Scott Fitzgerald",
+        "publicationYear": 1925,
+        "isbn": "ISBN-54321",
+        "genre": "Fiction",
+        "language": "en",
+        "rating": 4.75,
+        "price": 17.95
+    },
+    {
+        "title": "The Catcher in the Rye",
+        "author": "J.D. Salinger",
+        "publicationYear": 1951,
+        "isbn": "ISBN-12345",
+        "genre": "Fiction",
+        "language": "ru",
+        "rating": 4.23,
+        "price": 0
+    },
+    {
+        "title": "Pride and Prejudice",
+        "author": "Jane Austen",
+        "publicationYear": 1813,
+        "isbn": "ISBN-67890",
+        "genre": "Classic",
+        "language": "az",
+        "rating": 4.25,
+        "price": 14.95
+    },
+    {
+        "title": "The Hobbit",
+        "author": "J.R.R. Tolkien",
+        "publicationYear": 1937,
+        "isbn": "ISBN-54321",
+        "genre": "Fantasy",
+        "language": "en",
+        "rating": 4.39,
+        "price": 19.99
+    },
+    {
+        "title": "The Da Vinci Code",
+        "author": "Dan Brown",
+        "publicationYear": 2003,
+        "isbn": "ISBN-98765",
+        "genre": "Mystery",
+        "language": "en",
+        "rating": 3.84,
+        "price": 12.50
+    },
+    {
+        "title": "Harry Potter and the Philosopher's Stone",
+        "author": "J.K. Rowling",
+        "publicationYear": 1997,
+        "isbn": "ISBN-13579",
+        "genre": "Fantasy",
+        "language": "az",
+        "rating": 4.47,
+        "price": 0
+    },
+    {
+        "title": "The Lord of the Rings",
+        "author": "J.R.R. Tolkien",
+        "publicationYear": 1954,
+        "isbn": "ISBN-24680",
+        "genre": "Fantasy",
+        "language": "en",
+        "rating": 4.5,
+        "price": 24.99
+      },
+      {
+        "title": "Brave New World",
+        "author": "Aldous Huxley",
+        "publicationYear": 1932,
+        "isbn": "ISBN-13579",
+        "genre": "Science Fiction",
+        "language": "en",
+        "rating": 4.17,
+        "price": 18.75
+      },
+      {
+        "title": "The Shining",
+        "author": "Stephen King",
+        "publicationYear": 1977,
+        "isbn": "ISBN-98765",
+        "genre": "Horror",
+        "language": "en",
+        "rating": 4.2,
+        "price": 0
+      },
+      {
+        "title": "The Girl with the Dragon Tattoo",
+        "author": "Stieg Larsson",
+        "publicationYear": 2005,
+        "isbn": "ISBN-54321",
+        "genre": "Mystery",
+        "language": "en",
+        "rating": 4.13,
+        "price": 16.50
+      }
+]
