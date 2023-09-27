@@ -1,0 +1,11 @@
+.rating
+{
+    position:absolute;
+    top:90%;
+    z-index: 1;
+}
+
+.purchase__wrapper:hover
+{
+    filter: brightness(90%);
+}

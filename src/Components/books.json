@@ -1,0 +1,63 @@
+[
+    {
+        "title": "1984",
+        "author": "George Orwell",
+        "publicationYear": 1949,
+        "isbn": "ISBN-12345",
+        "genre": "Fiction",
+        "language": "en",
+        "rating": 4.95,
+        "price": 20.50,
+        "img":"https://m.media-amazon.com/images/I/61NAx5pd6XL._AC_UF1000,1000_QL80_.jpg",
+        "description":"1984 description"
+    },
+    {
+        "title": "The Lord of the Rings",
+        "author": "J.R.R. Tolkien",
+        "publicationYear": 1954,
+        "isbn": "ISBN-24680",
+        "genre": "Fantasy",
+        "language": "en",
+        "rating": 4.5,
+        "price": 24.99,
+        "img":"https://harpercollins.co.uk/cdn/shop/products/x500_e117c374-7161-4f63-bfda-4278c87baea7_1200x1200.jpg?v=1695153246",
+        "description":"The Lord of the Rings description"
+        
+      },
+      {
+        "title": "Brave New World",
+        "author": "Aldous Huxley",
+        "publicationYear": 1932,
+        "isbn": "ISBN-13579",
+        "genre": "Science Fiction",
+        "language": "en",
+        "rating": 4.17,
+        "price": 18.75,
+        "img":"https://m.media-amazon.com/images/I/91D4YvdC0dL._AC_UF1000,1000_QL80_.jpg",
+        "description":"Brave New World description"
+      },
+      {
+        "title": "The Shining",
+        "author": "Stephen King",
+        "publicationYear": 1977,
+        "isbn": "ISBN-98765",
+        "genre": "Horror",
+        "language": "en",
+        "rating": 4.2,
+        "price": 0,
+        "img":"https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1353277730i/11588.jpg",
+        "description":"The Shining description"
+      },
+      {
+        "title": "The Girl with the Dragon Tattoo",
+        "author": "Stieg Larsson",
+        "publicationYear": 2005,
+        "isbn": "ISBN-54321",
+        "genre": "Mystery",
+        "language": "en",
+        "rating": 4.13,
+        "price": 16.50,
+        "img":"https://sdi4.chrislands.com/sdi/978/03/07/9/9780307949493.jpg",
+        "description":"The Girl with the Dragon Tattoo description"
+      }
+]
