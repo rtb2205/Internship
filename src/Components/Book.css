@@ -1,11 +1,33 @@
-.rating
-{
-    position:absolute;
-    top:90%;
-    z-index: 1;
+.rating {
+  position: absolute;
+  /* top: 90%; */
+  /* left: -1%; */
+  z-index: 1;
+  width: 6em;
 }
 
-.purchase__wrapper:hover
-{
-    filter: brightness(90%);
+.purchase__wrapper:hover {
+  filter: brightness(90%);
+}
+
+.language {
+  width: 10% !important;
+  height: 10% !important;
+  opacity: 0.8;
+}
+
+.card-image {
+  max-width: 100% !important;
+  max-height: 50vh !important;
+  width: 40vh;
+  height: auto !important;
+  display: block !important;
+}
+
+.my-cover-container {
+  height: 78.5vh;
+}
+
+.book {
+  height: 75vh !important;
 }

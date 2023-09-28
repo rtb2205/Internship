@@ -1,0 +1,13 @@
+button.owl-next {
+  color: white !important;
+  font-size: 2vw !important;
+  width: 5vw;
+  height: 5vh;
+}
+
+button.owl-prev {
+  color: white !important;
+  font-size: 2vw !important;
+  width: 5vw;
+  height: 5vh;
+}

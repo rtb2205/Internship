@@ -1,24 +1,22 @@
 import React from "react";
-import { Carousel } from "react-bootstrap";
+import { Badge, Carousel, Container } from "react-bootstrap";
 import books from "./books.json";
+import Book from "./Book.js";
+import "./Slider.css";
 
+import "owl.carousel/dist/assets/owl.carousel.css";
+import "owl.carousel/dist/assets/owl.theme.default.css";
+
+import OwlCarousel from "react-owl-carousel";
 
 export default function Slider() {
-  let items = books
-    .sort(function (a, b) {
-      return parseFloat(a.rating) - parseFloat(b.rating);
-    })
-    .slice(0, 10);
-
-  let bestSellers = items.map((item) => (
-    <Carousel.Item key={item.isbn}>
-      <div>
-        <p>{item.title}</p>
-        <img src={item.img}></img>
-      </div>
-    </Carousel.Item>
-  ));
-
-  console.log(books[0].img);
-  return <Carousel>{bestSellers}</Carousel>;
+  return (
+    <Container className="p-2 d-flex flex-column align-items-center">
+      <OwlCarousel items={4} className="owl-theme mt-1" loop nav margin={8}>
+        {books.map((book) => {
+          return <Book book={book} key={book.isbn} />;
+        })}
+      </OwlCarousel>
+    </Container>
+  );
 }

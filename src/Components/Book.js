@@ -1,12 +1,12 @@
 import React from "react";
 import "./Book.css";
 import { Card, Container } from "react-bootstrap";
-
+import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Image from "react-bootstrap/Image";
 import Badge from "react-bootstrap/Badge";
-
 import languages from "./languages.json";
+import { Tooltip } from "react-tooltip";
 
 function Rating({ rating }) {
   let badgeVariant;
@@ -22,15 +22,27 @@ function Rating({ rating }) {
 
   return (
     <Badge bg={badgeVariant} className="rating">
-      <h1>{rating}</h1>
+      <h4>{rating}</h4>
     </Badge>
   );
 }
 
 function Language({ language }) {
   console.log("language " + language);
-  let languageUrl = languages.find(item=> item.code === language).img;
-  return(<img src={languageUrl}></img>);
+  let languageStruct = languages.find((item) => item.code === language);
+  let languageUrl = languageStruct.img;
+  let languageFullName = languageStruct.fullname;
+  return (
+    <>
+      <img
+        src={languageUrl}
+        className="ms-2 language"
+        data-tooltip-id="language-tooltip"
+        data-tooltip-content={languageFullName}
+      />
+      <Tooltip id="language-tooltip" />
+    </>
+  );
 }
 
 function Purchase({ price }) {
@@ -56,46 +68,82 @@ function Purchase({ price }) {
   );
 }
 
-function BookHeader({ language, author, date }) {
-  console.log("BookHeader " + language);
+function Description({ text }) {
+  const [showDescription, setShowDescription] = useState(false);
+
+  const descContainerStyle = {
+    position: "absolute",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "end",
+    justifyContent: "Space-Between",
+    width: "98%",
+    top: "25%",
+  };
+
   return (
-    <div className="d-flex" style={{ opacity: 0.3 }}>
-      <div className="me-2">({date})</div>
-      <>•</>
-      <div className="me-2 ms-2">{author}</div>
-      <>•</>
-      <Language className="ms-2" language = {language}>{language}</Language>
+    <div style={descContainerStyle}>
+      <div>
+        <Button
+          style={{ position: "relative", "z-index": "2" }}
+          onMouseEnter={() => setShowDescription(true)}
+          onMouseLeave={() => setShowDescription(false)}
+        >
+          <img src="./icons/Other/info-square-fill.svg" alt="Info" />
+        </Button>
+      </div>
+
+      {showDescription && (
+        <Card style={{ width: "100%" }}>
+          <Card.Body>
+            <Card.Text>{text}</Card.Text>
+          </Card.Body>
+        </Card>
+      )}
     </div>
   );
 }
 
-export default function Book() {
+function BookHeader({ language, author, date }) {
+  console.log("BookHeader " + language);
+  return (
+    <div className="d-flex mb-2">
+      <div className="me-2" style={{ opacity: 0.3 }}>
+        ({date})
+      </div>
+      <>•</>
+      <div className="me-2 ms-2" style={{ opacity: 0.3 }}>
+        {author}
+      </div>
+      <>•</>
+      <Language language={language}></Language>
+    </div>
+  );
+}
+
+export default function Book({ book }) {
   //Only for tests start
-  let price = 0;
-  let rating = 4.1;
-  let title = "The Girl with the Dragon Tattoo";
-  let language = "en";
-  let author = "Stieg Larson";
-  let date = "1984";
-  //Only for tests end
+  let price = book.price;
+  let rating = book.rating;
+  let title = book.title;
+  let language = book.language;
+  let author = book.author;
+  let date = book.publicationYear;
+  let img = book.img;
+  let description = book.description;
+  // Only for tests end
+
   console.log("Book " + language);
   return (
-    <Card border="light" data-bs-theme="dark" className="d-flex p-2">
-      <div className="position-relative container-fluid">
+    <Card border="light" data-bs-theme="dark" className="d-flex p-2 book">
+      <div className="my-cover-container position-relative container-fluid">
         <Rating rating={rating} />
-        <Card.Img
-          style={{ transform: "scale(0.95)" }}
-          src="https://images.booksense.com/images/268/389/9780857389268.jpg"
-        />
+        <Description text={description} />
+        <Card.Img className="card-image" src={img} />
       </div>
       <Card.Body>
         <Card.Title>{title}</Card.Title>
-        <Card.Text style={{ opacity: 0.8 }}>
-          A journalist is aided by a young female hacker in his search for the
-          killer of a woman who has been dead for forty years. A journalist is
-          aided by a young female hacker in his search for the killer of a woman
-          who has been dead for forty years..
-        </Card.Text>
+        {/* <Card.Text style={{ opacity: 0.8 }}>{description}</Card.Text> */}
         <BookHeader
           language={language}
           author={author}
@@ -106,4 +154,3 @@ export default function Book() {
     </Card>
   );
 }
-

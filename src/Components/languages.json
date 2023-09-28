@@ -1,17 +1,17 @@
 [
   {
     "code": "en",
-    "img": "./Components/icons/Languages/az.png",
+    "img": "./icons/Languages/en.png",
     "fullname": "English"
   },
   {
     "code": "ru",
-    "img": "./Components/icons/Languages/ru.png",
+    "img": "./icons/Languages/ru.png",
     "fullname": "Russian"
   },
   {
     "code": "az",
-    "img": "./Components/icons/Languages/en.png",
+    "img": "./icons/Languages/az.png",
     "fullname": "Azerbaijani"
   }
 ]
