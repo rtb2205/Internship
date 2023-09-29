@@ -11,8 +11,8 @@
 }
 
 .language {
-  width: 10% !important;
-  height: 10% !important;
+  height: 2em !important;
+  width: 2em !important;
   opacity: 0.8;
 }
 

@@ -1,9 +1,10 @@
 [
   {
+    "id": "1",
     "title": "1984",
     "author": "George Orwell",
-    "publicationYear": 1949,
-    "isbn": "1",
+    "publication_year": 1949,
+    "isbn": "9780451524935",
     "genre": "Fiction",
     "language": "en",
     "rating": 4.95,
@@ -12,10 +13,11 @@
     "description": "1984 is a dystopian novella by George Orwell published in 1949, which follows the life of Winston Smith, a low ranking member of 'the Party', who is frustrated by the omnipresent eyes of the party, and its ominous ruler Big Brother. 'Big Brother' controls every aspect of people's lives."
   },
   {
+    "id": "2",
     "title": "The Lord of the Rings",
     "author": "J.R.R. Tolkien",
-    "publicationYear": 1954,
-    "isbn": "2",
+    "publication_year": 1954,
+    "isbn": "9780544003415",
     "genre": "Fantasy",
     "language": "en",
     "rating": 4.5,
@@ -24,10 +26,11 @@
     "description": "The Lord of the Rings is the saga of a group of sometimes reluctant heroes who set forth to save their world from consummate evil. Its many worlds and creatures were drawn from Tolkien's extensive knowledge of philology and folklore"
   },
   {
+    "id": "3",
     "title": "Brave New World",
     "author": "Aldous Huxley",
-    "publicationYear": 1932,
-    "isbn": "3",
+    "publication_year": 1932,
+    "isbn": "9780060850524",
     "genre": "Science Fiction",
     "language": "en",
     "rating": 4.17,
@@ -36,10 +39,11 @@
     "description": "The novel examines a futuristic society, called the World State, that revolves around science and efficiency. In this society, emotions and individuality are conditioned out of children at a young age, and there are no lasting relationships because “every one belongs to every one else” (a common World State dictum)."
   },
   {
+    "id": "4",
     "title": "The Shining",
     "author": "Stephen King",
-    "publicationYear": 1977,
-    "isbn": "4",
+    "publication_year": 1977,
+    "isbn": "9780385121675",
     "genre": "Horror",
     "language": "en",
     "rating": 4.2,
@@ -48,10 +52,11 @@
     "description": "A family heads to an isolated hotel for the winter where a sinister presence influences the father into violence, while his psychic son sees horrific forebodings from both past and future."
   },
   {
+    "id": "5",
     "title": "The Girl with the Dragon Tattoo",
     "author": "Stieg Larsson",
-    "publicationYear": 2005,
-    "isbn": "5",
+    "publication_year": 2005,
+    "isbn": "9780307949493",
     "genre": "Mystery",
     "language": "az",
     "rating": 4.13,

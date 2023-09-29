@@ -28,8 +28,8 @@ function Rating({ rating }) {
 }
 
 function Language({ language }) {
-  console.log("language " + language);
-  let languageStruct = languages.find((item) => item.code === language);
+  let languageStruct = languages.find((item) => item.code == language);
+  if (!languageStruct) return;
   let languageUrl = languageStruct.img;
   let languageFullName = languageStruct.fullname;
   return (
@@ -58,9 +58,9 @@ function Purchase({ price }) {
           <Badge bg="none" style={{ top: 0 }}>
             GET FOR
           </Badge>
-          <Badge bg={price === 0 ? "danger" : "success"} style={{ top: 0 }}>
+          <Badge bg={price == 0 ? "danger" : "success"} style={{ top: 0 }}>
             {" "}
-            {price === 0 ? "FREE" : price + " USD"}
+            {price == 0 ? "FREE" : price + " USD"}
           </Badge>
         </div>
       </Button>
@@ -85,7 +85,7 @@ function Description({ text }) {
     <div style={descContainerStyle}>
       <div>
         <Button
-          style={{ position: "relative", "z-index": "2" }}
+          style={{ position: "relative", zIndex: "2" }}
           onMouseEnter={() => setShowDescription(true)}
           onMouseLeave={() => setShowDescription(false)}
         >
@@ -105,14 +105,13 @@ function Description({ text }) {
 }
 
 function BookHeader({ language, author, date }) {
-  console.log("BookHeader " + language);
   return (
-    <div className="d-flex mb-2">
-      <div className="me-2" style={{ opacity: 0.3 }}>
+    <div className="w-100 d-flex mb-3 justify-content-between">
+      <div className="me-2" style={{ fontSize: "1.2vw", opacity: 0.3 }}>
         ({date})
       </div>
       <>•</>
-      <div className="me-2 ms-2" style={{ opacity: 0.3 }}>
+      <div className="me-2 ms-2" style={{ fontSize: "1.2vw", opacity: 0.3 }}>
         {author}
       </div>
       <>•</>
@@ -121,28 +120,32 @@ function BookHeader({ language, author, date }) {
   );
 }
 
-export default function Book({ book }) {
+export default function Book({ book, bookStyle = {} }) {
   //Only for tests start
   let price = book.price;
   let rating = book.rating;
   let title = book.title;
   let language = book.language;
   let author = book.author;
-  let date = book.publicationYear;
+  let date = book.publication_year;
   let img = book.img;
   let description = book.description;
   // Only for tests end
 
-  console.log("Book " + language);
   return (
-    <Card border="light" data-bs-theme="dark" className="d-flex p-2 book">
+    <Card
+      style={bookStyle}
+      border="light"
+      data-bs-theme="dark"
+      className="d-flex p-2 book "
+    >
       <div className="my-cover-container position-relative container-fluid">
         <Rating rating={rating} />
         <Description text={description} />
         <Card.Img className="card-image" src={img} />
       </div>
-      <Card.Body>
-        <Card.Title>{title}</Card.Title>
+      <Card.Body className="d-flex flex-column align-items-center">
+        <Card.Title className="w-100">{title}</Card.Title>
         {/* <Card.Text style={{ opacity: 0.8 }}>{description}</Card.Text> */}
         <BookHeader
           language={language}

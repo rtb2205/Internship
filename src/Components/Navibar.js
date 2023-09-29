@@ -17,15 +17,9 @@ export default function NaviBar() {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link>
-                <Link to="/">Главная</Link>
-              </Nav.Link>
-              <Nav.Link>
-                <Link to="/about">О сайте</Link>
-              </Nav.Link>
-              <Nav.Link>
-                <Link to="/adminPanel">Администраторская панель</Link>
-              </Nav.Link>
+              <Nav.Link href="/">Главная</Nav.Link>
+              <Nav.Link href="/about">О сайте</Nav.Link>
+              <Nav.Link href="/adminPanel">Администраторская панель </Nav.Link>
             </Nav>
             <Nav className="justify-content-sm-between flex-row">
               <Button variant="primary" className="me-2">
