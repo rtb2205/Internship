@@ -84,7 +84,7 @@ export default function BookShelf() {
 
   let visibleBooks = slicedBooks();
   visibleBooks = visibleBooks.map((item) => {
-    return <Book book={item} />;
+    return <Book book={item} bookStyle={bookStyle} />;
   });
   return (
     <Container fluid className="d-flex">

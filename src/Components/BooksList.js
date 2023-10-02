@@ -7,7 +7,7 @@ import { Table, Form } from "react-bootstrap";
 import Book from "./Book";
 import { type } from "@testing-library/user-event/dist/type";
 
-function ModalGeneral({ text, variant, body, setBooksArray, booksArray }) {
+function ModalGeneral({ text, variant, body = {}, setBooksArray, booksArray }) {
   let handleSubmit;
 
   if (text == "Add") {
@@ -17,9 +17,9 @@ function ModalGeneral({ text, variant, body, setBooksArray, booksArray }) {
       isbn: "",
       title: "",
       author: "",
-      publicationYear: "",
-      genre: "",
-      language: "",
+      publication_year: "123",
+      genre: 1,
+      language: "az",
       rating: "",
       price: 0,
     };
@@ -54,6 +54,7 @@ function ModalGeneral({ text, variant, body, setBooksArray, booksArray }) {
     };
 
     for (const [key, value] of Object.entries(currentBook)) {
+      if (key == "genre" || key == "language") continue;
       let fieldType = {
         type: "text",
       };
@@ -82,6 +83,7 @@ function ModalGeneral({ text, variant, body, setBooksArray, booksArray }) {
         </Form.Group>
       );
     }
+
     const bookStyle = { position: "fixed", right: "2%", top: "4%" };
 
     modalBody = (
@@ -194,24 +196,32 @@ export default function BooksList() {
     );
   });
   return (
-    <Table striped bordered hover variant="dark">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Title</th>
-          <th>Author</th>
-          <th>Publication year</th>
-          <th>Genre</th>
-          <th>Language</th>
-          <th>Rating</th>
-          <th>Price</th>
-          <th>Image</th>
-          <th>Description</th>
-          <th>Manage</th>
-        </tr>
-      </thead>
-      <tbody>{mainData}</tbody>
-    </Table>
-    // </div>
+    <div className="d-flex flex-column align-items-center">
+      <ModalGeneral
+        text="Add"
+        variant="success"
+        // body={book}
+        setBooksArray={setBooksArray}
+        booksArray={booksArray}
+      />
+      <Table striped bordered hover variant="dark">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Publication year</th>
+            <th>Genre</th>
+            <th>Language</th>
+            <th>Rating</th>
+            <th>Price</th>
+            <th>Image</th>
+            <th>Description</th>
+            <th>Manage</th>
+          </tr>
+        </thead>
+        <tbody>{mainData}</tbody>
+      </Table>
+    </div>
   );
 }

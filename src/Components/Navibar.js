@@ -34,12 +34,17 @@ export default function NaviBar() {
               {/* <Nav.Link href="/about">О сайте</Nav.Link> */}
               <Nav.Link href="/adminPanel">Администраторская панель </Nav.Link>
             </Nav>
-            <Nav className="justify-content-sm-between flex-row">
+            <Nav className="justify-content-sm-between flex-row align-items-center">
               <Form.Control
                 type="password"
                 onChange={(event) => setPassword(event.target.value)}
+                className="h-100"
               />
-              <Button variant="primary" className="me-2" onClick={handleLogIn}>
+              <Button
+                variant="primary"
+                className="w-50 ms-2"
+                onClick={handleLogIn}
+              >
                 Log In
               </Button>
               {/* <Button variant="primary">Sign Out</Button> */}
