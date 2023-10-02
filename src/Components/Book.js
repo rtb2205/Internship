@@ -7,6 +7,7 @@ import Image from "react-bootstrap/Image";
 import Badge from "react-bootstrap/Badge";
 import languages from "./languages.json";
 import { Tooltip } from "react-tooltip";
+import genres from "./genres.json";
 
 function Rating({ rating }) {
   let badgeVariant;
@@ -23,6 +24,14 @@ function Rating({ rating }) {
   return (
     <Badge bg={badgeVariant} className="rating">
       <h4>{rating}</h4>
+    </Badge>
+  );
+}
+
+function Genre({ genre }) {
+  return (
+    <Badge bg="primary" className="genre">
+      <h6>{genre}</h6>
     </Badge>
   );
 }
@@ -104,7 +113,7 @@ function Description({ text }) {
   );
 }
 
-function BookHeader({ language, author, date }) {
+function BookHeader({ language, author, date, genre }) {
   return (
     <div className="w-100 d-flex mb-3 justify-content-between">
       <div className="me-2" style={{ fontSize: "1.2vw", opacity: 0.3 }}>
@@ -113,6 +122,9 @@ function BookHeader({ language, author, date }) {
       <>•</>
       <div className="me-2 ms-2" style={{ fontSize: "1.2vw", opacity: 0.3 }}>
         {author}
+      </div>
+      <div className="me-2 ms-2" style={{ fontSize: "1.2vw", opacity: 0.3 }}>
+        {genre}
       </div>
       <>•</>
       <Language language={language}></Language>
@@ -130,6 +142,7 @@ export default function Book({ book, bookStyle = {} }) {
   let date = book.publication_year;
   let img = book.img;
   let description = book.description;
+  let genre = genres.find((item) => item.id == book.genre).name;
   // Only for tests end
 
   return (
@@ -143,8 +156,9 @@ export default function Book({ book, bookStyle = {} }) {
         <Rating rating={rating} />
         <Description text={description} />
         <Card.Img className="card-image" src={img} />
+        <Genre genre={genre} />
       </div>
-      <Card.Body className="d-flex flex-column align-items-center">
+      <Card.Body className="d-flex flex-column align-items-center  text-wrap">
         <Card.Title className="w-100">{title}</Card.Title>
         {/* <Card.Text style={{ opacity: 0.8 }}>{description}</Card.Text> */}
         <BookHeader

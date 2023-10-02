@@ -7,7 +7,9 @@ import { Table, Form } from "react-bootstrap";
 import Book from "./Book";
 import { type } from "@testing-library/user-event/dist/type";
 
-function ModalGeneral({ text, variant, body, setBooksArray }) {
+function ModalGeneral({ text, variant, body, setBooksArray, booksArray }) {
+  let handleSubmit;
+
   if (text == "Add") {
     body = {
       id: 0,
@@ -38,45 +40,73 @@ function ModalGeneral({ text, variant, body, setBooksArray }) {
   }
 
   let formFields = [];
-  for (const [key, value] of Object.entries(currentBook)) {
-    let fieldType = {
-      type: "text",
+  let modalBody;
+  console.log(booksArray);
+
+  if (text != "Remove") {
+    handleSubmit = (modifiedBook) => {
+      const indexToUpdate = booksArray.findIndex(
+        (book) => book.id === modifiedBook.id
+      );
+      const updatedBooksArray = [...booksArray];
+      updatedBooksArray[indexToUpdate] = modifiedBook;
+      setBooksArray(updatedBooksArray);
     };
-    if (typeof value === "number") {
-      fieldType["type"] = "number";
-    } else if (typeof value === "boolean") {
-      fieldType["type"] = "checkbox";
-    }
 
-    if (key === "description")
-      fieldType = {
-        as: "textarea",
+    for (const [key, value] of Object.entries(currentBook)) {
+      let fieldType = {
+        type: "text",
       };
-    formFields.push(
-      <Form.Group className="mb-3">
-        <Form.Label>
-          {key.charAt(0).toUpperCase() + key.slice(1).toLowerCase()}
-        </Form.Label>
-        <Form.Control
-          name={key}
-          {...fieldType}
-          placeholder={"Enter " + key}
-          onChange={formFieldChangeHandler}
-          value={value}
-        />
-      </Form.Group>
+      if (typeof value === "number") {
+        fieldType["type"] = "number";
+      } else if (typeof value === "boolean") {
+        fieldType["type"] = "checkbox";
+      }
+
+      if (key === "description")
+        fieldType = {
+          as: "textarea",
+        };
+      formFields.push(
+        <Form.Group className="mb-3">
+          <Form.Label>
+            {key.charAt(0).toUpperCase() + key.slice(1).toLowerCase()}
+          </Form.Label>
+          <Form.Control
+            name={key}
+            {...fieldType}
+            placeholder={"Enter " + key}
+            onChange={formFieldChangeHandler}
+            value={value}
+          />
+        </Form.Group>
+      );
+    }
+    const bookStyle = { position: "fixed", right: "2%", top: "4%" };
+
+    modalBody = (
+      <Modal.Body className="d-flex">
+        <Form className="w-100 flex-grow-1">{formFields}</Form>
+        <Book book={currentBook} bookStyle={bookStyle} />
+      </Modal.Body>
     );
+  } else {
+    modalBody = (
+      <Modal.Body className="d-flex justify-content-center">
+        <h4>Are you sure?</h4>
+      </Modal.Body>
+    );
+    handleSubmit = (modifiedBook) => {
+      const indexToUpdate = booksArray.findIndex(
+        (book) => book.id === modifiedBook.id
+      );
+
+      console.log(modifiedBook);
+      const updatedBooksArray = [...booksArray];
+      updatedBooksArray.splice(indexToUpdate, 1);
+      setBooksArray(updatedBooksArray);
+    };
   }
-
-  const bookStyle = { position: "fixed", right: "2%", top: "4%" };
-
-  let handleSubmit;
-  let modalBody = (
-    <Modal.Body className="d-flex">
-      <Form className="w-100 flex-grow-1">{formFields}</Form>
-      <Book book={currentBook} bookStyle={bookStyle} />
-    </Modal.Body>
-  );
 
   return (
     <>
@@ -98,7 +128,13 @@ function ModalGeneral({ text, variant, body, setBooksArray }) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleSubmit}>
+          <Button
+            variant="primary"
+            onClick={() => {
+              handleSubmit(currentBook);
+              handleClose();
+            }}
+          >
             Submit
           </Button>
         </Modal.Footer>
@@ -107,7 +143,7 @@ function ModalGeneral({ text, variant, body, setBooksArray }) {
   );
 }
 
-function DataString({ bookData, setBooksArray }) {
+function DataString({ bookData, setBooksArray, booksArray }) {
   return (
     <tr>
       <th>{bookData.isbn}</th>
@@ -129,12 +165,14 @@ function DataString({ bookData, setBooksArray }) {
             variant="primary"
             body={bookData}
             setBooksArray={setBooksArray}
+            booksArray={booksArray}
           />
           <ModalGeneral
             text="Remove"
             variant="danger"
-            body="Are you sure?"
+            body={bookData}
             setBooksArray={setBooksArray}
+            booksArray={booksArray}
           />
         </div>
       </th>
@@ -151,6 +189,7 @@ export default function BooksList() {
         bookData={book}
         key={book.isbn}
         setBooksArray={setBooksArray}
+        booksArray={booksArray}
       />
     );
   });
@@ -173,5 +212,6 @@ export default function BooksList() {
       </thead>
       <tbody>{mainData}</tbody>
     </Table>
+    // </div>
   );
 }

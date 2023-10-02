@@ -1,14 +1,17 @@
 import NaviBar from "./Components/Navibar";
 import Slider from "./Components/Slider";
 import Book from "./Components/Book";
+import BookShelf from "./Components/BookShelf";
 import React from "react";
-import { Container } from "react-bootstrap";
+
+import "./App.css";
 
 export default function Home() {
   return (
-    <div className=" bg-dark bg-gradient">
+    <div className="page bg-dark bg-gradient">
       <NaviBar />
       <Slider />
+      <BookShelf />
     </div>
   );
 }
