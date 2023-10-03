@@ -20,6 +20,7 @@ export default function App() {
 }
 
 function AdminPanelOrHome() {
-  if (localStorage.getItem("admin")) return <AdminPanel />;
+  console.log("test", localStorage.getItem("admin") == true);
+  if (localStorage.getItem("admin") === "true") return <AdminPanel />;
   else return <Navigate replace to="/" />;
 }

@@ -1,16 +1,16 @@
 [
   {
-    "code": "en",
+    "id": "en",
     "img": "./icons/Languages/en.png",
     "fullname": "English"
   },
   {
-    "code": "ru",
+    "id": "ru",
     "img": "./icons/Languages/ru.png",
     "fullname": "Russian"
   },
   {
-    "code": "az",
+    "id": "az",
     "img": "./icons/Languages/az.png",
     "fullname": "Azerbaijani"
   }

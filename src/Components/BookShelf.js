@@ -28,9 +28,9 @@ export default function BookShelf() {
       item.title.toLowerCase().startsWith(filter.title.toLowerCase()) &&
       item.price <= filter.price &&
       item.rating >= filter.rating &&
-      (genres.find((el) => el.id == item.genre).name === filter.genre ||
+      (genres.find((el) => el.id == item.genre).fullname === filter.genre ||
         filter.genre === "All") &&
-      (languages.find((el) => el.code == item.language).fullname ===
+      (languages.find((el) => el.id == item.language).fullname ===
         filter.language ||
         filter.language === "All")
     )

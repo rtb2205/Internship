@@ -37,7 +37,7 @@ function Genre({ genre }) {
 }
 
 function Language({ language }) {
-  let languageStruct = languages.find((item) => item.code == language);
+  let languageStruct = languages.find((item) => item.id == language);
   if (!languageStruct) return;
   let languageUrl = languageStruct.img;
   let languageFullName = languageStruct.fullname;
@@ -142,7 +142,7 @@ export default function Book({ book, bookStyle = {} }) {
   let date = book.publication_year;
   let img = book.img;
   let description = book.description;
-  let genre = genres.find((item) => item.id == book.genre).name;
+  let genre = genres.find((item) => item.id == book.genre).fullname;
   // Only for tests end
 
   return (

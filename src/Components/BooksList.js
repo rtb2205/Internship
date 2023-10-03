@@ -6,24 +6,34 @@ import { useState } from "react";
 import { Table, Form } from "react-bootstrap";
 import Book from "./Book";
 import { type } from "@testing-library/user-event/dist/type";
+import { RefTypeToString } from "./CommonFunctions.js";
 
 function ModalGeneral({ text, variant, body = {}, setBooksArray, booksArray }) {
   let handleSubmit;
 
   if (text == "Add") {
+    let max = 0;
+    for (let i = 0; i < booksArray.length; i++) {
+      if (booksArray[i].id > max) max = booksArray[i].id;
+      console.log(booksArray[i].id);
+      console.log("max = " + max);
+    }
+
+    let id = max + 1;
     body = {
-      id: 0,
+      id: id,
       title: "",
       isbn: "",
       title: "",
       author: "",
-      publication_year: "123",
-      genre: 1,
+      publication_year: "2000",
+      genre: "1",
       language: "az",
       rating: "",
       price: 0,
     };
   }
+
   const [show, setShow] = useState(false);
   const [currentBook, setCurrentBook] = useState(body);
 
@@ -41,17 +51,25 @@ function ModalGeneral({ text, variant, body = {}, setBooksArray, booksArray }) {
 
   let formFields = [];
   let modalBody;
-  console.log(booksArray);
+  // console.log(booksArray);
 
   if (text != "Remove") {
-    handleSubmit = (modifiedBook) => {
-      const indexToUpdate = booksArray.findIndex(
-        (book) => book.id === modifiedBook.id
-      );
-      const updatedBooksArray = [...booksArray];
-      updatedBooksArray[indexToUpdate] = modifiedBook;
-      setBooksArray(updatedBooksArray);
-    };
+    if (text === "Change") {
+      handleSubmit = (modifiedBook) => {
+        const indexToUpdate = booksArray.findIndex(
+          (book) => book.id === modifiedBook.id
+        );
+        const updatedBooksArray = [...booksArray];
+        updatedBooksArray[indexToUpdate] = modifiedBook;
+        setBooksArray(updatedBooksArray);
+      };
+    } else {
+      handleSubmit = (modifiedBook) => {
+        const updatedBooksArray = [...booksArray];
+        updatedBooksArray.push(modifiedBook);
+        setBooksArray(updatedBooksArray);
+      };
+    }
 
     for (const [key, value] of Object.entries(currentBook)) {
       if (key == "genre" || key == "language") continue;
@@ -103,7 +121,7 @@ function ModalGeneral({ text, variant, body = {}, setBooksArray, booksArray }) {
         (book) => book.id === modifiedBook.id
       );
 
-      console.log(modifiedBook);
+      // console.log(modifiedBook);
       const updatedBooksArray = [...booksArray];
       updatedBooksArray.splice(indexToUpdate, 1);
       setBooksArray(updatedBooksArray);
@@ -151,7 +169,7 @@ function DataString({ bookData, setBooksArray, booksArray }) {
       <th>{bookData.isbn}</th>
       <th>{bookData.title}</th>
       <th>{bookData.author}</th>
-      <th>{bookData.publicationYear}</th>
+      <th>{bookData.publication_year}</th>
       <th>{bookData.genre}</th>
       <th>{bookData.language}</th>
       <th>{bookData.rating}</th>
@@ -207,7 +225,7 @@ export default function BooksList() {
       <Table striped bordered hover variant="dark">
         <thead>
           <tr>
-            <th>ID</th>
+            <th>Isbn</th>
             <th>Title</th>
             <th>Author</th>
             <th>Publication year</th>

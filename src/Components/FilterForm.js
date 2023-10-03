@@ -10,7 +10,7 @@ export default function FilterForm({ filter, setFilter }) {
   }
 
   const genresList = genres.map((item) => {
-    return <option>{item.name}</option>;
+    return <option>{item.fullname}</option>;
   });
   const languagesList = languages.map((item) => {
     return <option>{item.fullname}</option>;

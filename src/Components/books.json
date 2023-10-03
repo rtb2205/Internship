@@ -1,6 +1,6 @@
 [
   {
-    "id": "1",
+    "id": 1,
     "title": "1984",
     "author": "George Orwell",
     "publication_year": 1949,
@@ -13,7 +13,7 @@
     "description": "1984 is a dystopian novella by George Orwell published in 1949, which follows the life of Winston Smith, a low ranking member of 'the Party', who is frustrated by the omnipresent eyes of the party, and its ominous ruler Big Brother. 'Big Brother' controls every aspect of people's lives."
   },
   {
-    "id": "2",
+    "id": 2,
     "title": "The Lord of the Rings",
     "author": "J.R.R. Tolkien",
     "publication_year": 1954,
@@ -26,7 +26,7 @@
     "description": "The Lord of the Rings is the saga of a group of sometimes reluctant heroes who set forth to save their world from consummate evil. Its many worlds and creatures were drawn from Tolkien's extensive knowledge of philology and folklore"
   },
   {
-    "id": "3",
+    "id": 3,
     "title": "Brave New World",
     "author": "Aldous Huxley",
     "publication_year": 1932,
@@ -39,7 +39,7 @@
     "description": "The novel examines a futuristic society, called the World State, that revolves around science and efficiency. In this society, emotions and individuality are conditioned out of children at a young age, and there are no lasting relationships because “every one belongs to every one else” (a common World State dictum)."
   },
   {
-    "id": "4",
+    "id": 4,
     "title": "The Shining",
     "author": "Stephen King",
     "publication_year": 1977,
@@ -52,7 +52,7 @@
     "description": "A family heads to an isolated hotel for the winter where a sinister presence influences the father into violence, while his psychic son sees horrific forebodings from both past and future."
   },
   {
-    "id": "5",
+    "id": 5,
     "title": "The Girl with the Dragon Tattoo",
     "author": "Stieg Larsson",
     "publication_year": 2005,
@@ -65,7 +65,7 @@
     "description": "A journalist is aided by a young female hacker in his search for the killer of a woman who has been dead for forty years. A journalist is aided by a young female hacker in his search for the killer of a woman who has been dead for forty years."
   },
   {
-    "id": "6",
+    "id": 6,
     "title": "The Catcher in the Rye",
     "author": "J.D. Salinger",
     "publication_year": 1951,
@@ -78,7 +78,7 @@
     "description": "A classic novel about a young man's experiences in New York City."
   },
   {
-    "id": "7",
+    "id": 7,
     "title": "To Kill a Mockingbird",
     "author": "Harper Lee",
     "publication_year": 1960,
@@ -91,7 +91,7 @@
     "description": "A story of racial injustice and moral growth in the American South."
   },
   {
-    "id": "9",
+    "id": 9,
     "title": "The Hobbit",
     "author": "J.R.R. Tolkien",
     "publication_year": 1937,
@@ -104,7 +104,7 @@
     "description": "The classic tale of Bilbo Baggins' unexpected adventure."
   },
   {
-    "id": "10",
+    "id": 10,
     "title": "Pride and Prejudice",
     "author": "Jane Austen",
     "publication_year": 1813,
@@ -117,7 +117,7 @@
     "description": "A timeless love story set in the early 19th century."
   },
   {
-    "id": "11",
+    "id": 11,
     "title": "The Great Gatsby",
     "author": "F. Scott Fitzgerald",
     "publication_year": 1925,
@@ -130,7 +130,7 @@
     "description": "A story of decadence and the American Dream in the Roaring Twenties."
   },
   {
-    "id": "12",
+    "id": 12,
     "title": "Harry Potter and the Sorcerer's Stone",
     "author": "J.K. Rowling",
     "publication_year": 1997,
@@ -143,7 +143,7 @@
     "description": "The start of the magical journey of a young wizard, Harry Potter."
   },
   {
-    "id": "14",
+    "id": 14,
     "title": "The Alchemist",
     "author": "Paulo Coelho",
     "publication_year": 1988,
@@ -156,7 +156,7 @@
     "description": "A philosophical novel about a journey to find one's personal legend."
   },
   {
-    "id": "15",
+    "id": 15,
     "title": "The Hunger Games",
     "author": "Suzanne Collins",
     "publication_year": 2008,
