@@ -1,15 +1,15 @@
-import React from "react";
-import { Badge, Carousel, Container } from "react-bootstrap";
-import books from "./books.json";
+import React, { useContext } from "react";
+import { Container } from "react-bootstrap";
 import Book from "./Book.js";
 import "./Slider.css";
-
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 
 import OwlCarousel from "react-owl-carousel";
+import { BooksContext } from "./BooksContext.js";
 
 export default function Slider() {
+  const books = useContext(BooksContext);
   const sortedBooks = books.sort((a, b) => b.rating - a.rating);
   const topBooks = sortedBooks.slice(0, 5);
   return (

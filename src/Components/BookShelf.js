@@ -1,11 +1,11 @@
 import Book from "./Book";
-import React from "react";
+import React, { useContext } from "react";
 import { Container, Pagination } from "react-bootstrap";
-import books from "./books.json";
 import FilterForm from "./FilterForm";
 import { useState } from "react";
 import genres from "./genres.json";
 import languages from "./languages.json";
+import { BooksContext } from "./BooksContext";
 
 export default function BookShelf() {
   const bookStyle = { width: "20em", margin: "8px" };
@@ -20,6 +20,7 @@ export default function BookShelf() {
     isApplied: false,
   });
 
+  const books = useContext(BooksContext);
   const [filteredBooks, setFilteredBooks] = useState(books);
   let totalFiltered = filteredBooks.length;
   function applyFilter(item) {

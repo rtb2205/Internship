@@ -1,6 +1,5 @@
 import NaviBar from "./Components/Navibar";
 import Slider from "./Components/Slider";
-import Book from "./Components/Book";
 import BookShelf from "./Components/BookShelf";
 import React from "react";
 

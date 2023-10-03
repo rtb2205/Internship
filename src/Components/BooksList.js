@@ -1,16 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Badge, Button, Carousel, Container, Modal } from "react-bootstrap";
-import books from "./books.json";
 import "./Slider.css";
 import { useState } from "react";
 import { Table, Form } from "react-bootstrap";
 import Book from "./Book";
 import { type } from "@testing-library/user-event/dist/type";
 import { RefTypeToString } from "./CommonFunctions.js";
+import { BooksContext, BooksDispatchContext } from "./BooksContext";
 
 function ModalGeneral({ text, variant, body = {}, setBooksArray, booksArray }) {
-  let handleSubmit;
-
+  const dispatch = useContext(BooksDispatchContext);
   if (text == "Add") {
     let max = 0;
     for (let i = 0; i < booksArray.length; i++) {
@@ -51,26 +50,30 @@ function ModalGeneral({ text, variant, body = {}, setBooksArray, booksArray }) {
 
   let formFields = [];
   let modalBody;
-  // console.log(booksArray);
+  let handleType = "added";
 
-  if (text != "Remove") {
-    if (text === "Change") {
-      handleSubmit = (modifiedBook) => {
-        const indexToUpdate = booksArray.findIndex(
-          (book) => book.id === modifiedBook.id
-        );
-        const updatedBooksArray = [...booksArray];
-        updatedBooksArray[indexToUpdate] = modifiedBook;
-        setBooksArray(updatedBooksArray);
-      };
-    } else {
-      handleSubmit = (modifiedBook) => {
-        const updatedBooksArray = [...booksArray];
-        updatedBooksArray.push(modifiedBook);
-        setBooksArray(updatedBooksArray);
-      };
+  switch (text) {
+    case "Remove": {
+      handleType = "deleted";
+      break;
     }
+    case "Add": {
+      handleType = "added";
+      break;
+    }
+    case "Change": {
+      handleType = "changed";
+      break;
+    }
+  }
 
+  let handleSubmit = (modifiedBook) => {
+    dispatch({
+      type: handleType,
+      book: modifiedBook,
+    });
+  };
+  if (text != "Remove") {
     for (const [key, value] of Object.entries(currentBook)) {
       if (key == "genre" || key == "language") continue;
       let fieldType = {
@@ -116,16 +119,6 @@ function ModalGeneral({ text, variant, body = {}, setBooksArray, booksArray }) {
         <h4>Are you sure?</h4>
       </Modal.Body>
     );
-    handleSubmit = (modifiedBook) => {
-      const indexToUpdate = booksArray.findIndex(
-        (book) => book.id === modifiedBook.id
-      );
-
-      // console.log(modifiedBook);
-      const updatedBooksArray = [...booksArray];
-      updatedBooksArray.splice(indexToUpdate, 1);
-      setBooksArray(updatedBooksArray);
-    };
   }
 
   return (
@@ -201,7 +194,8 @@ function DataString({ bookData, setBooksArray, booksArray }) {
 }
 
 export default function BooksList() {
-  const [booksArray, setBooksArray] = useState(books);
+  const booksArray = useContext(BooksContext);
+  const setBooksArray = useContext(BooksDispatchContext);
 
   let mainData = booksArray.map((book) => {
     return (
