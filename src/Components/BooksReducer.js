@@ -1,26 +1,33 @@
 export default function BooksReducer(books, action) {
+  let newBooks;
   switch (action.type) {
     case "added": {
-      return [
+      newBooks = [
         ...books,
         {
           ...action.book,
         },
       ];
+      break;
     }
     case "changed": {
-      return books.map((t) => {
+      newBooks = books.map((t) => {
         if (t.id === action.book.id) {
           return action.book;
         } else {
           return t;
         }
       });
+      break;
     }
     case "deleted": {
-      return books.filter((t) => t.id !== action.book.id);
+      newBooks = books.filter((t) => t.id !== action.book.id);
+      break;
     }
-    default:
-      return books;
+    default: {
+      newBooks = books;
+    }
   }
+  localStorage.setItem("books", JSON.stringify(newBooks));
+  return newBooks;
 }

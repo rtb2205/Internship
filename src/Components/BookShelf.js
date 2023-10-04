@@ -3,14 +3,16 @@ import React, { useContext } from "react";
 import { Container, Pagination } from "react-bootstrap";
 import FilterForm from "./FilterForm";
 import { useState } from "react";
-import genres from "./genres.json";
-import languages from "./languages.json";
-import { BooksContext } from "./BooksContext";
+// import genres from "./genres.json";
+// import languages from "./languages.json";
+import { BooksContext, GenresContext, LanguageContext } from "./BooksContext";
 
 export default function BookShelf() {
   const bookStyle = { width: "20em", margin: "8px" };
   const booksPerPage = 8;
   const [curPage, setCurPage] = useState(1);
+  const books = useContext(BooksContext);
+  const maxPrice = Math.ceil(books.sort((a, b) => b.price - a.price)[0].price);
   const [filter, setFilter] = useState({
     title: "",
     price: "100",
@@ -18,22 +20,23 @@ export default function BookShelf() {
     genre: "All",
     language: "All",
     isApplied: false,
+    maxPrice: maxPrice,
   });
 
-  const books = useContext(BooksContext);
+  const genres = useContext(GenresContext);
+  const languages = useContext(LanguageContext);
+
   const [filteredBooks, setFilteredBooks] = useState(books);
   let totalFiltered = filteredBooks.length;
+
   function applyFilter(item) {
-    console.log(item.price <= filter.price || filter.price == 0);
+    console.log("Filter is " + item.language);
     if (
       item.title.toLowerCase().startsWith(filter.title.toLowerCase()) &&
-      item.price <= filter.price &&
-      item.rating >= filter.rating &&
-      (genres.find((el) => el.id == item.genre).fullname === filter.genre ||
-        filter.genre === "All") &&
-      (languages.find((el) => el.id == item.language).fullname ===
-        filter.language ||
-        filter.language === "All")
+      (item.price <= filter.price || item.usePrice === "off") &&
+      (item.rating >= filter.rating || item.useRating === "on") &&
+      (item.genre === filter.genre || filter.genre === "All") &&
+      (item.language === filter.language || filter.language === "All")
     )
       return true;
     return false;
@@ -54,7 +57,6 @@ export default function BookShelf() {
   }
 
   if (!filter.isApplied) {
-    console.log("Hello");
     setFilteredBooks(books.filter((item) => applyFilter(item)));
     setFilter((prevValue) => ({ ...prevValue, isApplied: true }));
     setCurPage(1);

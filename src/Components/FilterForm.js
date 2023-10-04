@@ -1,19 +1,22 @@
 import { Form, Button } from "react-bootstrap";
-import genres from "./genres.json";
-import languages from "./languages.json";
-import { useState } from "react";
-
+import { useContext, useState } from "react";
+import { LanguageContext, GenresContext } from "./BooksContext";
 export default function FilterForm({ filter, setFilter }) {
+  const genres = useContext(GenresContext);
+  const languages = useContext(LanguageContext);
+  console.log("max price is " + filter.maxPrice);
+  debugger;
   function formFieldChangeHandler(event) {
     const { name, value } = event.target;
     setFilter((prevData) => ({ ...prevData, [name]: value, isApplied: false }));
   }
 
   const genresList = genres.map((item) => {
-    return <option>{item.fullname}</option>;
+    return <option value={item.id}> {item.fullname}</option>;
   });
+
   const languagesList = languages.map((item) => {
-    return <option>{item.fullname}</option>;
+    return <option value={item.id}> {item.fullname}</option>;
   });
 
   const [price, setPrice] = useState(0);
@@ -65,8 +68,8 @@ export default function FilterForm({ filter, setFilter }) {
             <Form.Range
               name="price"
               min="0"
-              max="100"
-              defaultValue="100"
+              max={filter.maxPrice}
+              defaultValue={filter.maxPrice}
               onChange={(event) => {
                 setPrice(event.target.value);
                 formFieldChangeHandler(event);
@@ -74,7 +77,7 @@ export default function FilterForm({ filter, setFilter }) {
             ></Form.Range>
             <div className="w-100 d-flex justify-content-between">
               <div>0</div>
-              <div>100</div>
+              <div>{filter.maxPrice}</div>
             </div>
           </div>
           <Form.Label className="ms-4">{price}</Form.Label>

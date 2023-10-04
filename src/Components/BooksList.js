@@ -1,21 +1,24 @@
 import React, { useContext } from "react";
-import { Badge, Button, Carousel, Container, Modal } from "react-bootstrap";
+import { Button, Modal } from "react-bootstrap";
 import "./Slider.css";
 import { useState } from "react";
 import { Table, Form } from "react-bootstrap";
 import Book from "./Book";
-import { type } from "@testing-library/user-event/dist/type";
-import { RefTypeToString } from "./CommonFunctions.js";
-import { BooksContext, BooksDispatchContext } from "./BooksContext";
+import {
+  BooksContext,
+  BooksDispatchContext,
+  LanguageContext,
+  GenresContext,
+} from "./BooksContext";
 
-function ModalGeneral({ text, variant, body = {}, setBooksArray, booksArray }) {
+function ModalGeneral({ text, variant, body = {}, booksArray }) {
   const dispatch = useContext(BooksDispatchContext);
-  if (text == "Add") {
+  const languages = useContext(LanguageContext);
+  const genres = useContext(GenresContext);
+  if (text === "Add") {
     let max = 0;
     for (let i = 0; i < booksArray.length; i++) {
       if (booksArray[i].id > max) max = booksArray[i].id;
-      console.log(booksArray[i].id);
-      console.log("max = " + max);
     }
 
     let id = max + 1;
@@ -75,7 +78,27 @@ function ModalGeneral({ text, variant, body = {}, setBooksArray, booksArray }) {
   };
   if (text != "Remove") {
     for (const [key, value] of Object.entries(currentBook)) {
-      if (key == "genre" || key == "language") continue;
+      if (key == "genre" || key == "language") {
+        const List = eval(key + "s").map((item) => {
+          return <option value={item.id}> {item.fullname}</option>;
+        });
+
+        formFields.push(
+          <Form.Group className="mb-3">
+            <Form.Label>
+              {key.charAt(0).toUpperCase() + key.slice(1).toLowerCase()}
+            </Form.Label>
+            <Form.Select
+              name={key}
+              value={value}
+              onChange={formFieldChangeHandler}
+            >
+              {List}
+            </Form.Select>
+          </Form.Group>
+        );
+        continue;
+      }
       let fieldType = {
         type: "text",
       };
