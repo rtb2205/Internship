@@ -6,17 +6,17 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DataContext>();
 
-builder.Services.AddTransient<BookService>();
-builder.Services.AddTransient<GenreService>();
-builder.Services.AddTransient<LanguageService>();
+builder.Services.AddTransient<Service<Book>, BookService>();
+builder.Services.AddTransient<Service<Genre>, GenreService>();
+builder.Services.AddTransient<Service<Language> ,LanguageService>();
 
+builder.Services.AddControllers();
 
 var app = builder.Build();
 

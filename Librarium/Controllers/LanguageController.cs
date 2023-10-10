@@ -8,9 +8,9 @@ namespace Librarium.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BookController : MyController<Book, BookRequest, BookResponse>
+    public class LanguageController : MyController<Language, LanguageRequest, LanguageResponse>
     {
-        public BookController(Service<Book> service): base(service) { }
+        public LanguageController(Service<Language> service): base(service) { }
     }
 }
 

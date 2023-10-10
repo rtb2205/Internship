@@ -4,6 +4,10 @@ namespace Librarium.Models
 {
     public class Language
     {
+        public Language()
+        {
+            Id = Guid.NewGuid().ToString();
+        }
         [Required]
         public string? Id { get; set; }
         [Required]

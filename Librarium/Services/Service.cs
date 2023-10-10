@@ -6,10 +6,10 @@ namespace Librarium.Services
 {
     public class Service<T> : IService<T> where T : class
     {
-        public DbContext _context;
+        public DataContext _context;
         public DbSet<T> _dbSet;
 
-        public Service(DbContext context)
+        public Service(DataContext context)
         {
             _context = context;
             _dbSet = _context.Set<T>();
@@ -22,7 +22,7 @@ namespace Librarium.Services
             return await GetAll(); ;
         }
 
-        public async Task<List<T>?> Delete(int id)
+        public async Task<List<T>?> Delete(string id)
         {
             var result  = await _dbSet.FindAsync(id);
             if (result is null)
@@ -46,7 +46,7 @@ namespace Librarium.Services
             return result;
         }
 
-        public async Task<List<T>?> Update(int id, T request)
+        public async Task<List<T>?> Update(string id, T request)
         {
             var result = await _dbSet.FindAsync(id);
             if (result is null)

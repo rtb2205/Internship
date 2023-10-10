@@ -4,6 +4,10 @@ namespace Librarium.Models
 {
     public class Book
     {
+        public Book()
+        { 
+            Id = Guid.NewGuid().ToString();
+        }
         [Required]
         public string? Id { get; set; }
         [Required]
@@ -15,11 +19,11 @@ namespace Librarium.Models
         [Required]
         public string? Isbn { get; set; }
         [Required]
-        public int GenreId { get; set; }
+        public string GenreId { get; set; }
         [Required]
         public Genre? Genre { get; set; }
         [Required]
-        public int LanguageId { get; set; }
+        public string LanguageId { get; set; }
         [Required]
         public Language? Language { get; set; }
         [Required]
