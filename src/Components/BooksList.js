@@ -9,7 +9,7 @@ import {
   BooksDispatchContext,
   LanguageContext,
   GenresContext,
-} from "./BooksContext";
+} from "./Contexts";
 
 function ModalGeneral({ text, variant, body = {}, booksArray }) {
   const dispatch = useContext(BooksDispatchContext);

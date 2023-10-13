@@ -31,9 +31,9 @@
 }
 
 .my-cover-container {
-  height: 78.5vh;
+  /* height: 78.5vh; */
 }
 
 .book {
-  height: 75vh !important;
+  /* width: 25%; */
 }

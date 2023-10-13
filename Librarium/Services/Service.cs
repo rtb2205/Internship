@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Librarium.Services
 {
-    public class Service<T> : IService<T> where T : class
+    public class Service<T, FilterType> : IService<T, FilterType> where T : class where FilterType : class
     {
         public DataContext _context;
         public DbSet<T> _dbSet;
@@ -29,7 +29,7 @@ namespace Librarium.Services
                 return null;
             _dbSet.Remove(result);
             await _context.SaveChangesAsync();
-           return await GetAll(); ;
+           return await GetAll();
         }
 
         public virtual async Task<T?> Get(string id)
@@ -40,7 +40,7 @@ namespace Librarium.Services
             return result;
         }
 
-        public virtual async Task<List<T>> GetAll()
+        public virtual async Task<List<T>> GetAll(FilterType? filter = null)
         {
             var result = await _dbSet.ToListAsync();
             return result;

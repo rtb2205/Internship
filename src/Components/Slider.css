@@ -9,3 +9,8 @@ button.owl-prev {
   font-size: 2vw !important;
   width: 2em;
 }
+
+.owl-item {
+  display: flex;
+  justify-content: center !important;
+}

@@ -9,9 +9,9 @@ namespace Librarium.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LanguageController : MyController<Language, LanguageRequest, LanguageResponse, DefaultFilter>
+    public class ImageController : MyController<Image, ImageRequest, ImageResponse, DefaultFilter>
     {
-        public LanguageController(Service<Language, DefaultFilter> service): base(service) { }
+        public ImageController(Service<Image, DefaultFilter> service): base(service) { }
     }
 }
 

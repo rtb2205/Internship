@@ -2,11 +2,11 @@
 
 namespace Librarium.Models
 {
-    public class LanguageRequest
+    public class ImageResponse
     {
         [Required]
-        public string? Name { get; set; }
+        public string? Id { get; set; }
         [Required]
-        public string? ImageId {  get; set; }
+        public string? Url { get; set; }
     }
 }

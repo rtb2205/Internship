@@ -1,22 +1,20 @@
 import { Form, Button } from "react-bootstrap";
 import { useContext, useState } from "react";
-import { LanguageContext, GenresContext } from "./BooksContext";
+import { LanguageContext, GenresContext } from "./Contexts";
 export default function FilterForm({ filter, setFilter }) {
   const genres = useContext(GenresContext);
   const languages = useContext(LanguageContext);
-  console.log("max price is " + filter.maxPrice);
-  debugger;
   function formFieldChangeHandler(event) {
     const { name, value } = event.target;
     setFilter((prevData) => ({ ...prevData, [name]: value, isApplied: false }));
   }
 
   const genresList = genres.map((item) => {
-    return <option value={item.id}> {item.fullname}</option>;
+    return <option value={item.id}> {item.name}</option>;
   });
 
   const languagesList = languages.map((item) => {
-    return <option value={item.id}> {item.fullname}</option>;
+    return <option value={item.id}> {item.name}</option>;
   });
 
   const [price, setPrice] = useState(0);

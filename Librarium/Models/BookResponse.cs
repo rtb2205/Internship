@@ -6,7 +6,6 @@ namespace Librarium.Models
 {
     public class BookResponse
     {
-
         [Required]
         public string? Id { get; set; }
         [Required]
@@ -17,10 +16,9 @@ namespace Librarium.Models
         public int PublicationYear { get; set; }
         [Required]
         public string? Isbn { get; set; }
-        [Required]
         public Genre? Genre { get; set; }
-        [Required]
         public Language? Language { get; set; }
+        public Image? Image { get; set; }
         [Required]
         public float Rating { get; set; }
         [Required]

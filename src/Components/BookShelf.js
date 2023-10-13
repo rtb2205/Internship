@@ -5,14 +5,18 @@ import FilterForm from "./FilterForm";
 import { useState } from "react";
 // import genres from "./genres.json";
 // import languages from "./languages.json";
-import { BooksContext, GenresContext, LanguageContext } from "./BooksContext";
+import { BooksContext } from "./Contexts";
 
 export default function BookShelf() {
-  const bookStyle = { width: "20em", margin: "8px" };
+  const books = useContext(BooksContext);
+  const bookStyle = {
+    // width: "20em", margin: "8px"
+  };
   const booksPerPage = 8;
   const [curPage, setCurPage] = useState(1);
-  const books = useContext(BooksContext);
-  const maxPrice = Math.ceil(books.sort((a, b) => b.price - a.price)[0].price);
+  const maxPrice = Math.ceil(
+    books.sort((a, b) => b.price - a.price)[0]?.price ?? 100
+  );
   const [filter, setFilter] = useState({
     title: "",
     price: "100",
@@ -22,9 +26,6 @@ export default function BookShelf() {
     isApplied: false,
     maxPrice: maxPrice,
   });
-
-  const genres = useContext(GenresContext);
-  const languages = useContext(LanguageContext);
 
   const [filteredBooks, setFilteredBooks] = useState(books);
   let totalFiltered = filteredBooks.length;
@@ -87,7 +88,7 @@ export default function BookShelf() {
 
   let visibleBooks = slicedBooks();
   visibleBooks = visibleBooks.map((item) => {
-    return <Book book={item} bookStyle={bookStyle} />;
+    return <Book key={item.Id} book={item} bookStyle={bookStyle} />;
   });
   return (
     <Container fluid className="d-flex">

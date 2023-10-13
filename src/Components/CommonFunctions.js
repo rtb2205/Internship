@@ -9,3 +9,34 @@ export async function RefTypeToString(id, jsonName) {
     return foundObject.fullname;
   }
 }
+
+export function DefaultBook() {
+  return {
+    id: "",
+    title: "",
+    author: "",
+    publication_year: 0,
+    isbn: "",
+    genre: 0,
+    language: "",
+    rating: 0,
+    price: 0,
+    img: "",
+    description: "",
+  };
+}
+
+export function DefaultGenre() {
+  return {
+    id: "",
+    fullname: "",
+  };
+}
+
+export function DefaultLanguage() {
+  return {
+    id: "",
+    img: "",
+    fullname: "",
+  };
+}

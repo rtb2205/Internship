@@ -2,6 +2,7 @@
 using Helpers.AutoMapperProfiles;
 using Librarium.Models;
 using Librarium.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,19 +10,18 @@ namespace Librarium.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public abstract class MyController<T, RequestType, ResponseType> : ControllerBase where T : class
+    public abstract class MyController<T, RequestType, ResponseType, FilterType> : ControllerBase where T : class where FilterType : class
     {
-        private readonly Service<T> _service;
-
-        public MyController(Service<T> service)
+        private readonly Service<T, FilterType> _service;
+        public MyController(Service<T, FilterType> service)
         {
             _service = service;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<T>>> GetAll()
+        public async Task<ActionResult<List<T>>> GetAll([FromQuery]FilterType? filter = null)
         {
-            return await _service.GetAll();
+            return await _service.GetAll(filter);
         }
 
         [HttpGet("{id}")]
