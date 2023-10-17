@@ -2,14 +2,13 @@
 
 namespace Librarium.Models
 {
-    public class Image
+    public class Image: Model
     {
         public Image()
         {
             Id = Guid.NewGuid().ToString();
         }
-        [Required]
-        public string? Id { get; set; }
+
         [Required]
         public string? Url { get; set; }
     }

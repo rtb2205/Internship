@@ -24,8 +24,6 @@ namespace Librarium.Models
         [Required]
         public float Price { get; set; }
         [Required]
-        public string? ImageUrl { get; set; }
-        [Required]
         public string? Description { get; set; }
 
     };

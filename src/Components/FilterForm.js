@@ -1,9 +1,14 @@
-import { Form, Button } from "react-bootstrap";
-import { useContext, useState } from "react";
-import { LanguageContext, GenresContext } from "./Contexts";
+import { Form } from "react-bootstrap";
+import { useState, useEffect } from "react";
+import { Initialize } from "./BackEndApi";
 export default function FilterForm({ filter, setFilter }) {
-  const genres = useContext(GenresContext);
-  const languages = useContext(LanguageContext);
+  const [genres, setGenres] = useState([]);
+  const [languages, setLanguages] = useState([]);
+  useEffect(() => {
+    Initialize(setGenres, "Genre");
+    Initialize(setLanguages, "Language");
+  }, []);
+
   function formFieldChangeHandler(event) {
     const { name, value } = event.target;
     setFilter((prevData) => ({ ...prevData, [name]: value, isApplied: false }));
@@ -32,7 +37,7 @@ export default function FilterForm({ filter, setFilter }) {
       </Form.Group>
       <Form.Group className="mb-3">
         <Form.Label>Genre</Form.Label>
-        <Form.Select name="genre" onChange={formFieldChangeHandler}>
+        <Form.Select name="genreId" onChange={formFieldChangeHandler}>
           <option>All</option>
           {genresList}
         </Form.Select>
@@ -61,29 +66,21 @@ export default function FilterForm({ filter, setFilter }) {
       </Form.Group>
       <Form.Group className="mb-3">
         <Form.Label>Price</Form.Label>
-        <div className="d-flex justify-content-between">
-          <div className="w-75">
-            <Form.Range
-              name="price"
-              min="0"
-              max={filter.maxPrice}
-              defaultValue={filter.maxPrice}
-              onChange={(event) => {
-                setPrice(event.target.value);
-                formFieldChangeHandler(event);
-              }}
-            ></Form.Range>
-            <div className="w-100 d-flex justify-content-between">
-              <div>0</div>
-              <div>{filter.maxPrice}</div>
-            </div>
-          </div>
-          <Form.Label className="ms-4">{price}</Form.Label>
-        </div>
+        <Form.Control
+          type="text"
+          name="price"
+          placeholder="Set max. price"
+          onChange={(event) => {
+            setPrice(event.target.value);
+
+            formFieldChangeHandler(event);
+          }}
+        />
+        <Form.Text></Form.Text>
       </Form.Group>
       <Form.Group>
         <Form.Label>Language</Form.Label>
-        <Form.Select name="language" onChange={formFieldChangeHandler}>
+        <Form.Select name="languageId" onChange={formFieldChangeHandler}>
           <option>All</option>
           {languagesList}
         </Form.Select>

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Librarium.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231010093416_Init")]
+    [Migration("20231016070402_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -41,9 +41,8 @@ namespace Librarium.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("ImageId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Isbn")
                         .IsRequired()
@@ -70,6 +69,8 @@ namespace Librarium.Migrations
 
                     b.HasIndex("GenreId");
 
+                    b.HasIndex("ImageId");
+
                     b.HasIndex("LanguageId");
 
                     b.ToTable("Books");
@@ -89,9 +90,26 @@ namespace Librarium.Migrations
                     b.ToTable("Genres");
                 });
 
+            modelBuilder.Entity("Librarium.Models.Image", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Images");
+                });
+
             modelBuilder.Entity("Librarium.Models.Language", b =>
                 {
                     b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ImageId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
@@ -99,6 +117,8 @@ namespace Librarium.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ImageId");
 
                     b.ToTable("Languages");
                 });
@@ -111,6 +131,10 @@ namespace Librarium.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Librarium.Models.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId");
+
                     b.HasOne("Librarium.Models.Language", "Language")
                         .WithMany()
                         .HasForeignKey("LanguageId")
@@ -119,7 +143,18 @@ namespace Librarium.Migrations
 
                     b.Navigation("Genre");
 
+                    b.Navigation("Image");
+
                     b.Navigation("Language");
+                });
+
+            modelBuilder.Entity("Librarium.Models.Language", b =>
+                {
+                    b.HasOne("Librarium.Models.Image", "Image")
+                        .WithMany()
+                        .HasForeignKey("ImageId");
+
+                    b.Navigation("Image");
                 });
 #pragma warning restore 612, 618
         }

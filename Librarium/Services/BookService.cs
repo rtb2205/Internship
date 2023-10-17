@@ -11,29 +11,14 @@ namespace Librarium.Services
         {
 
         }
-        public override async Task<Book?> Get(string id)
-        {
-            var result = await _dbSet.Where(b => b.Id == id).Include(b => b.Language).Include(b => b.Genre).FirstOrDefaultAsync();
-            if (result is null)
-                return null;
-            return result;
-        }
 
-        public override async Task<List<Book>> GetAll(BooksFilter? filter = null)
-        {
-            var result = _context.Books.AsQueryable();
-
-            result = ApplyInclude(result);
-
-            return await result.ToListAsync();
-        }
-        protected IQueryable<Book> ApplyInclude(IQueryable<Book> query)
+        protected override IQueryable<Book> ApplyInclude(IQueryable<Book> query)
         {
             return query
-                .Include(b => b.Genre).Include(b => b.Language);
+                .Include(b => b.Genre).Include(b => b.Language).Include(b=>b.Image).Include(b => (b!.Language).Image);
         }
 
-        protected IQueryable<Book> ApplyFilter(IQueryable<Book> query, BooksFilter filter)
+        protected override IQueryable<Book> ApplyFilter(IQueryable<Book> query, BooksFilter? filter = null)
         {
             if (!(filter.GenreId is null))
                 query = query.Where(b => b.GenreId == filter.GenreId);

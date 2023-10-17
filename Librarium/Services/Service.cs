@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Librarium.Services
 {
-    public class Service<T, FilterType> : IService<T, FilterType> where T : class where FilterType : class
+    public class Service<T, FilterType> : IService<T, FilterType> where T : Model where FilterType : class
     {
         public DataContext _context;
         public DbSet<T> _dbSet;
@@ -29,21 +29,27 @@ namespace Librarium.Services
                 return null;
             _dbSet.Remove(result);
             await _context.SaveChangesAsync();
-           return await GetAll();
+            return await GetAll();
         }
 
         public virtual async Task<T?> Get(string id)
         {
-            var result = await _dbSet.FindAsync(id);
+            var result = _dbSet.AsQueryable();
+            result = ApplyInclude(result);
             if (result is null)
                 return null;
-            return result;
+            return await result.FirstOrDefaultAsync(e => e.Id == id);
         }
 
         public virtual async Task<List<T>> GetAll(FilterType? filter = null)
         {
-            var result = await _dbSet.ToListAsync();
-            return result;
+            var result = _dbSet.AsQueryable();
+
+            result = ApplyInclude(result);
+            result = ApplyFilter(result, filter);
+
+            return await result.ToListAsync();
+
         }
 
         public async Task<List<T>?> Update(string id, T request)
@@ -54,5 +60,13 @@ namespace Librarium.Services
             await _context.SaveChangesAsync();
             return await GetAll();
         }
+        protected virtual IQueryable<T> ApplyInclude(IQueryable<T> query)
+        {
+            return query;
+        }
+
+        protected virtual IQueryable<T> ApplyFilter(IQueryable<T> query, FilterType? filter = null)
+        { return query; }
+
     }
 }

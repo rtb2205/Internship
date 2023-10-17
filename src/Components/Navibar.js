@@ -15,9 +15,7 @@ export default function NaviBar() {
       setIsAdmin(true);
     }
   }
-  useEffect(() => {
-    console.log(isAdmin);
-  }, [isAdmin]);
+  
 
   function handleLogOut() {
     localStorage.setItem("admin", false);

@@ -2,14 +2,12 @@
 
 namespace Librarium.Models
 {
-    public class Book
+    public class Book: Model
     {
         public Book()
         {
             Id = Guid.NewGuid().ToString();
         }
-        [Required]
-        public string? Id { get; set; }
         [Required]
         public string? Title { get; set; }
         [Required]

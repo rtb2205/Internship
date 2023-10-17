@@ -10,7 +10,7 @@ namespace Librarium.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public abstract class MyController<T, RequestType, ResponseType, FilterType> : ControllerBase where T : class where FilterType : class
+    public abstract class MyController<T, RequestType, ResponseType, FilterType> : ControllerBase where T : Model where FilterType : class
     {
         private readonly Service<T, FilterType> _service;
         public MyController(Service<T, FilterType> service)

@@ -2,14 +2,12 @@
 
 namespace Librarium.Models
 {
-    public class Genre
+    public class Genre: Model
     {
         public Genre()
         {
             Id = Guid.NewGuid().ToString();
         }
-        [Required]
-        public string? Id { get; set; }
         [Required]
         public string? Name { get; set; }
     }

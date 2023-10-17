@@ -1,17 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import "./Book.css";
 import { Card } from "react-bootstrap";
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Badge from "react-bootstrap/Badge";
 import { Tooltip } from "react-tooltip";
-import { GenresContext, LanguageContext } from "./Contexts";
 // import genres from "./genres.json";
 
 export default function Book({ book, bookStyle = {} }) {
-  let genres = useContext(GenresContext);
-  let languages = useContext(LanguageContext);
-
   function Rating({ rating }) {
     let badgeVariant;
 
@@ -33,16 +29,14 @@ export default function Book({ book, bookStyle = {} }) {
   function Genre({ genre }) {
     return (
       <Badge bg="primary" className="genre">
-        <h6>{genre}</h6>
+        <h6>{genre.name}</h6>
       </Badge>
     );
   }
 
   function Language({ language }) {
-    let languageStruct = languages.find((item) => item.id == language);
-    if (!languageStruct) return;
-    let languageUrl = languageStruct.imageUrl;
-    let languageFullName = languageStruct.name;
+    let languageUrl = language.image.url;
+    let languageFullName = language.name;
     return (
       <>
         <img
@@ -115,7 +109,7 @@ export default function Book({ book, bookStyle = {} }) {
     );
   }
 
-  function BookHeader({ language, author, date, genre }) {
+  function BookHeader({ language, author, date }) {
     return (
       <div className="w-100 d-flex mb-3 justify-content-between">
         <div className="me-2" style={{ fontSize: "1.2vw", opacity: 0.3 }}>
@@ -125,29 +119,24 @@ export default function Book({ book, bookStyle = {} }) {
         <div className="me-2 ms-2" style={{ fontSize: "1.2vw", opacity: 0.3 }}>
           {author}
         </div>
-        <div className="me-2 ms-2" style={{ fontSize: "1.2vw", opacity: 0.3 }}>
-          {genre}
-        </div>
         <>•</>
         <Language language={language}></Language>
       </div>
     );
   }
 
-  if (book === null || book === "") return <div>Loading...</div>;
-  //Only for tests start
   let price = book.price;
   let rating = book.rating;
   let title = book.title;
-  let language = book.language.id;
+  let language = book.language;
   let author = book.author;
   let publicationYear = book.publicationYear;
-  let img = book.imageUrl;
+  let img = book.image?.url;
+  if (img == null)
+    img =
+      "https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-1-scaled.png";
   let description = book.description;
-  let genre = genres.find((item) => item.id == book.genre);
-  if (genre) {
-    genre = genre.name;
-  }
+  let genre = book.genre;
   // Only for tests end
 
   return (
@@ -155,7 +144,7 @@ export default function Book({ book, bookStyle = {} }) {
       style={bookStyle}
       border="light"
       data-bs-theme="dark"
-      className="d-flex p-2 book "
+      className="d-flex p-2 book"
     >
       <div className="my-cover-container position-relative container-fluid">
         <Rating rating={rating} />
@@ -165,7 +154,6 @@ export default function Book({ book, bookStyle = {} }) {
       </div>
       <Card.Body className="d-flex flex-column align-items-center  text-wrap">
         <Card.Title className="w-100">{title}</Card.Title>
-        {/* <Card.Text style={{ opacity: 0.8 }}>{description}</Card.Text> */}
         <BookHeader
           language={language}
           author={author}

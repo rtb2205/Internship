@@ -16,6 +16,7 @@ builder.Services.AddDbContext<DataContext>();
 builder.Services.AddTransient<Service<Book, BooksFilter>, BookService>();
 builder.Services.AddTransient<Service<Genre, DefaultFilter>, GenreService>();
 builder.Services.AddTransient<Service<Language, DefaultFilter> ,LanguageService>();
+builder.Services.AddTransient<Service<Image, DefaultFilter>, ImageService>();
 
 builder.Services.AddControllers();
 

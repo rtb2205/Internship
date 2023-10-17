@@ -6,12 +6,16 @@ import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 
 import OwlCarousel from "react-owl-carousel";
-import { BooksContext } from "./Contexts.js";
+import { Initialize } from "./BackEndApi.js";
+import { useState } from "react";
 
 export default function Slider() {
-  const books = useContext(BooksContext);
-  const topBooks = books?.sort((a, b) => b.rating - a.rating).slice(0, 5);
+  const [books, setBooks] = useState([]);
+  useEffect(() => {
+    Initialize(setBooks, "Book");
+  }, []);
 
+  const topBooks = books?.sort((a, b) => b.rating - a.rating).slice(0, 5);
   return (
     <Container className="p-2 d-flex flex-column align-items-center">
       <OwlCarousel

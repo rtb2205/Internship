@@ -1,47 +1,40 @@
 import Book from "./Book";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Container, Pagination } from "react-bootstrap";
 import FilterForm from "./FilterForm";
 import { useState } from "react";
-// import genres from "./genres.json";
-// import languages from "./languages.json";
-import { BooksContext } from "./Contexts";
+import { Initialize } from "./BackEndApi";
 
 export default function BookShelf() {
-  const books = useContext(BooksContext);
-  const bookStyle = {
-    // width: "20em", margin: "8px"
-  };
   const booksPerPage = 8;
+  const [filteredBooks, setFilteredBooks] = useState([]);
   const [curPage, setCurPage] = useState(1);
-  const maxPrice = Math.ceil(
-    books.sort((a, b) => b.price - a.price)[0]?.price ?? 100
-  );
   const [filter, setFilter] = useState({
     title: "",
-    price: "100",
+    price: "",
     rating: "0",
-    genre: "All",
-    language: "All",
+    genreId: "All",
+    languageId: "All",
     isApplied: false,
-    maxPrice: maxPrice,
   });
 
-  const [filteredBooks, setFilteredBooks] = useState(books);
   let totalFiltered = filteredBooks.length;
 
-  function applyFilter(item) {
-    console.log("Filter is " + item.language);
-    if (
-      item.title.toLowerCase().startsWith(filter.title.toLowerCase()) &&
-      (item.price <= filter.price || item.usePrice === "off") &&
-      (item.rating >= filter.rating || item.useRating === "on") &&
-      (item.genre === filter.genre || filter.genre === "All") &&
-      (item.language === filter.language || filter.language === "All")
-    )
-      return true;
-    return false;
-  }
+  useEffect(() => {
+    if (filter.isApplied) return;
+    let paramString = "";
+    for (const key in filter) {
+      if (filter.hasOwnProperty(key)) {
+        let filterValue = filter[key];
+        if (filterValue == "All") filterValue = "";
+        paramString += `&${key}=${filterValue}`;
+      }
+    }
+    paramString = paramString.slice(1);
+    Initialize(setFilteredBooks,"Book", paramString);
+    setFilter((prevValue) => ({ ...prevValue, isApplied: true }));
+    setCurPage(1);
+  }, [filter.isApplied]);
 
   function slicedBooks() {
     let bookAmount = filteredBooks.length;
@@ -55,12 +48,6 @@ export default function BookShelf() {
     }
 
     return shelfBooks;
-  }
-
-  if (!filter.isApplied) {
-    setFilteredBooks(books.filter((item) => applyFilter(item)));
-    setFilter((prevValue) => ({ ...prevValue, isApplied: true }));
-    setCurPage(1);
   }
 
   let items = [];
@@ -88,16 +75,19 @@ export default function BookShelf() {
 
   let visibleBooks = slicedBooks();
   visibleBooks = visibleBooks.map((item) => {
-    return <Book key={item.Id} book={item} bookStyle={bookStyle} />;
+    return <Book key={item.Id} book={item} />;
   });
   return (
     <Container fluid className="d-flex">
       <FilterForm filter={filter} setFilter={setFilter} />
       <div className="d-flex flex-column align-items-center w-75">
-        <Container fluid className="d-flex flex-wrap justify-content-center">
+        <Container
+          fluid
+          className="d-flex flex-wrap justify-content-center m-2 "
+        >
           {visibleBooks}
         </Container>
-        <Pagination>{items}</Pagination>
+        <Pagination className="m-2"> {items}</Pagination>
       </div>
     </Container>
   );

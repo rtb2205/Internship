@@ -2,21 +2,16 @@
 
 namespace Librarium.Models
 {
-    public class Language
+    public class Language: Model
     {
         public Language()
         {
             Id = Guid.NewGuid().ToString();
         }
-        [Required]
-        public string? Id { get; set; }
 
         [Required]
         public string? Name { get; set; }
-
-        [Required]
-        public string? ImageUrl {  get; set; }
-        [Required]
+        public string? ImageId {  get; set; }
         public Image? Image { get; set; }
     }
 }
