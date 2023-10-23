@@ -1,6 +1,9 @@
-﻿using Librarium.Data;
+﻿using Helpers.AutoMapperProfiles;
+using Librarium.Data;
 using Librarium.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting.Internal;
 
 namespace Librarium.Services
 {
@@ -15,14 +18,14 @@ namespace Librarium.Services
             _dbSet = _context.Set<T>();
         }
 
-        public async Task<List<T>> Add(T item)
+        public virtual async Task<string?> Add(T item)
         {
             _dbSet.Add(item);         
             await _context.SaveChangesAsync();
-            return await GetAll(); ;
+            return item.Id;
         }
 
-        public async Task<List<T>?> Delete(string id)
+        public virtual async Task<List<T>?> Delete(string id)
         {
             var result  = await _dbSet.FindAsync(id);
             if (result is null)
@@ -52,21 +55,39 @@ namespace Librarium.Services
 
         }
 
-        public async Task<List<T>?> Update(string id, T request)
+        public virtual async Task<string?> Update(string id, T request)
         {
             var result = await _dbSet.FindAsync(id);
             if (result is null)
                 return null;
+
+            var requestType = request.GetType();
+            var resultProperties = typeof(T).GetProperties();
+           
+            foreach (var requestProperty in requestType.GetProperties())
+            {
+                var resultProperty = resultProperties.FirstOrDefault(prop => prop.Name == requestProperty.Name);
+                if (resultProperty != null)
+                {
+                    var value = requestProperty.GetValue(request);
+                    if (requestProperty.Name == "Id")
+                        continue;
+                        resultProperty.SetValue(result, value);
+                }
+            }
             await _context.SaveChangesAsync();
-            return await GetAll();
+            return id;
         }
         protected virtual IQueryable<T> ApplyInclude(IQueryable<T> query)
         {
             return query;
         }
-
         protected virtual IQueryable<T> ApplyFilter(IQueryable<T> query, FilterType? filter = null)
         { return query; }
 
+        public virtual async Task<string?> AttachAppFile(string appFileId, string OwnerId)
+        {
+            return await Task.FromResult("");
+        }
     }
 }

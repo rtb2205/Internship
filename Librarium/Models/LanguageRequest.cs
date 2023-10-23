@@ -7,6 +7,6 @@ namespace Librarium.Models
         [Required]
         public string? Name { get; set; }
         [Required]
-        public string? ImageId {  get; set; }
+        public string? AppFileId {  get; set; }
     }
 }

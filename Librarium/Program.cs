@@ -2,6 +2,8 @@ using Librarium.Data;
 using Librarium.Filters;
 using Librarium.Models;
 using Librarium.Services;
+using AutoMapper;
+using Helpers.AutoMapperProfiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,9 +18,25 @@ builder.Services.AddDbContext<DataContext>();
 builder.Services.AddTransient<Service<Book, BooksFilter>, BookService>();
 builder.Services.AddTransient<Service<Genre, DefaultFilter>, GenreService>();
 builder.Services.AddTransient<Service<Language, DefaultFilter> ,LanguageService>();
-builder.Services.AddTransient<Service<Image, DefaultFilter>, ImageService>();
+builder.Services.AddTransient<Service<AppFile, DefaultFilter>, AppFileService>();
+
+//builder.Services.AddSingleton<IWebHostEnvironment>();
+
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
 builder.Services.AddControllers();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:3000",
+                                             "http://localhost:3000")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                      });
+});
 
 var app = builder.Build();
 
@@ -31,11 +49,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.Use((ctx, next) => {
-    ctx.Response.Headers["Access-Control-Allow-Origin"] = "http://localhost:3000"; 
-    return next();
-}
-);
+app.UseCors();
 
 //app.UseHttpsRedirection();
 

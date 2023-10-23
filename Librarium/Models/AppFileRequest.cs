@@ -2,9 +2,9 @@
 
 namespace Librarium.Models
 {
-    public class ImageRequest
+    public class AppFileRequest
     {
         [Required]
-        public string? Url { get; set; }
+        public FormFile? FormFile { get; set; }
     }
 }

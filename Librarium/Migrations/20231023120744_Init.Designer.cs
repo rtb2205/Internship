@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Librarium.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20231016070402_Init")]
+    [Migration("20231023120744_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -24,9 +24,34 @@ namespace Librarium.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Librarium.Models.AppFile", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Extension")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AppFiles");
+                });
+
             modelBuilder.Entity("Librarium.Models.Book", b =>
                 {
                     b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AppFileId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Author")
@@ -39,9 +64,6 @@ namespace Librarium.Migrations
 
                     b.Property<string>("GenreId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ImageId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Isbn")
@@ -67,9 +89,9 @@ namespace Librarium.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GenreId");
+                    b.HasIndex("AppFileId");
 
-                    b.HasIndex("ImageId");
+                    b.HasIndex("GenreId");
 
                     b.HasIndex("LanguageId");
 
@@ -90,26 +112,12 @@ namespace Librarium.Migrations
                     b.ToTable("Genres");
                 });
 
-            modelBuilder.Entity("Librarium.Models.Image", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Url")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Images");
-                });
-
             modelBuilder.Entity("Librarium.Models.Language", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ImageId")
+                    b.Property<string>("AppFileId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
@@ -118,22 +126,22 @@ namespace Librarium.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ImageId");
+                    b.HasIndex("AppFileId");
 
                     b.ToTable("Languages");
                 });
 
             modelBuilder.Entity("Librarium.Models.Book", b =>
                 {
+                    b.HasOne("Librarium.Models.AppFile", "AppFile")
+                        .WithMany()
+                        .HasForeignKey("AppFileId");
+
                     b.HasOne("Librarium.Models.Genre", "Genre")
                         .WithMany()
                         .HasForeignKey("GenreId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Librarium.Models.Image", "Image")
-                        .WithMany()
-                        .HasForeignKey("ImageId");
 
                     b.HasOne("Librarium.Models.Language", "Language")
                         .WithMany()
@@ -141,20 +149,20 @@ namespace Librarium.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Genre");
+                    b.Navigation("AppFile");
 
-                    b.Navigation("Image");
+                    b.Navigation("Genre");
 
                     b.Navigation("Language");
                 });
 
             modelBuilder.Entity("Librarium.Models.Language", b =>
                 {
-                    b.HasOne("Librarium.Models.Image", "Image")
+                    b.HasOne("Librarium.Models.AppFile", "AppFile")
                         .WithMany()
-                        .HasForeignKey("ImageId");
+                        .HasForeignKey("AppFileId");
 
-                    b.Navigation("Image");
+                    b.Navigation("AppFile");
                 });
 #pragma warning restore 612, 618
         }

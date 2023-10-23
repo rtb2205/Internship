@@ -16,7 +16,6 @@ namespace Librarium.Models
         public string? GenreId { get; set; }
         [Required]
         public string? LanguageId { get; set; }
-        public string? ImageId { get; set; }
         [Required]
         public float Rating { get; set; }
         [Required]

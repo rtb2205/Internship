@@ -11,6 +11,20 @@ namespace Librarium.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AppFiles",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Path = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Extension = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppFiles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Genres",
                 columns: table => new
                 {
@@ -23,32 +37,20 @@ namespace Librarium.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Images",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Url = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Images", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Languages",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ImageId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    AppFileId = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Languages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Languages_Images_ImageId",
-                        column: x => x.ImageId,
-                        principalTable: "Images",
+                        name: "FK_Languages_AppFiles_AppFileId",
+                        column: x => x.AppFileId,
+                        principalTable: "AppFiles",
                         principalColumn: "Id");
                 });
 
@@ -65,23 +67,23 @@ namespace Librarium.Migrations
                     LanguageId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Rating = table.Column<float>(type: "real", nullable: false),
                     Price = table.Column<float>(type: "real", nullable: false),
-                    ImageId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    AppFileId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Books", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Books_AppFiles_AppFileId",
+                        column: x => x.AppFileId,
+                        principalTable: "AppFiles",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Books_Genres_GenreId",
                         column: x => x.GenreId,
                         principalTable: "Genres",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Books_Images_ImageId",
-                        column: x => x.ImageId,
-                        principalTable: "Images",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Books_Languages_LanguageId",
                         column: x => x.LanguageId,
@@ -91,14 +93,14 @@ namespace Librarium.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Books_AppFileId",
+                table: "Books",
+                column: "AppFileId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Books_GenreId",
                 table: "Books",
                 column: "GenreId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Books_ImageId",
-                table: "Books",
-                column: "ImageId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Books_LanguageId",
@@ -106,9 +108,9 @@ namespace Librarium.Migrations
                 column: "LanguageId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Languages_ImageId",
+                name: "IX_Languages_AppFileId",
                 table: "Languages",
-                column: "ImageId");
+                column: "AppFileId");
         }
 
         /// <inheritdoc />
@@ -124,7 +126,7 @@ namespace Librarium.Migrations
                 name: "Languages");
 
             migrationBuilder.DropTable(
-                name: "Images");
+                name: "AppFiles");
         }
     }
 }

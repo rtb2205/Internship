@@ -18,7 +18,7 @@ namespace Librarium.Models
         public string? Isbn { get; set; }
         public Genre? Genre { get; set; }
         public Language? Language { get; set; }
-        public Image? Image { get; set; }
+        public AppFile? AppFile { get; set; }
         [Required]
         public float Rating { get; set; }
         [Required]

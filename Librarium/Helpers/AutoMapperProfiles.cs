@@ -2,16 +2,28 @@
 using AutoMapper;
 using Librarium.Models;
 
-namespace Helpers.AutoMapperProfiles
+namespace Helpers.AutoMapperProfiles;
+
+public class Source<T>
 {
-    class AutoMapperProfiles
-    {
-        public static T Transform<V, T>(V source)
+    public T? Value { get; set; }
+}
+
+public class Destination<T>
+{
+    public T? Value { get; set; }
+}
+
+class AutoMapperProfile : Profile
+{
+    public AutoMapperProfile() {
+        var config = new MapperConfiguration(cfg =>
         {
-            var config = new MapperConfiguration(cfg => cfg.CreateMap<V, T>());
-            var mapper = new Mapper(config);
-            T result = mapper.Map<V, T>(source);
-            return result;
-        }
+            cfg.CreateMap(typeof(Source<>), typeof(Destination<>));
+            cfg.CreateMap<AppFileRequest, AppFile>().ForMember(g => g.Extension, opt => opt.MapFrom(u => u.FormFile!.ContentType)).
+            ForMember(g => g.Path, opt => opt.MapFrom(u => u.FormFile!.Name)).ForMember(g => g.Path, opt => Path.Combine(Directory.GetCurrentDirectory(), "uploads"));
+
+        });
+        config.CompileMappings();
     }
 }

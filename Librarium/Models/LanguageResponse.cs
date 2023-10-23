@@ -8,6 +8,6 @@ namespace Librarium.Models
         public string? Id { get; set; }
         [Required]
         public string? Name { get; set; }
-        public Image? Image {  get; set; }
+        public AppFile? AppFile {  get; set; }
     }
 }

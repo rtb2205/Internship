@@ -1,4 +1,5 @@
-﻿using Azure.Core;
+﻿using AutoMapper;
+using Azure.Core;
 using Helpers.AutoMapperProfiles;
 using Librarium.Models;
 using Librarium.Services;
@@ -12,40 +13,43 @@ namespace Librarium.Controllers
     [ApiController]
     public abstract class MyController<T, RequestType, ResponseType, FilterType> : ControllerBase where T : Model where FilterType : class
     {
-        private readonly Service<T, FilterType> _service;
-        public MyController(Service<T, FilterType> service)
+        protected readonly Service<T, FilterType> _service;
+        protected readonly IMapper _mapper;
+
+        public MyController(Service<T, FilterType> service, IMapper mapper)
         {
             _service = service;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<T>>> GetAll([FromQuery]FilterType? filter = null)
+        public virtual async Task<ActionResult<List<T>>> GetAll([FromQuery]FilterType? filter = null)
         {
             return await _service.GetAll(filter);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<T>> Get(string id)
+        public virtual async Task<ActionResult<T>> Get(string id)
         {
             var result = await _service.Get(id);
             if (result is null)
                 return NotFound($"{typeof(T).Name} not found.");
-            var newItem = AutoMapperProfiles.Transform<T, ResponseType>(result);
+            var newItem = _mapper.Map<T, ResponseType>(result);
             return Ok(newItem);
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<T>>> Add (RequestType item)
+        public virtual async Task<ActionResult<string?>> Add (RequestType item)
         {
-            var newItem = AutoMapperProfiles.Transform<RequestType, T>(item);
+            var newItem = _mapper.Map<RequestType, T>(item);
             var result = await _service.Add(newItem);
             return Ok(result);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<List<T>>> Update(string id, RequestType request)
+        public virtual async Task<ActionResult<string?>> Update(string id, RequestType request)
         {
-            var newItem = AutoMapperProfiles.Transform<RequestType, T>(request);
+            var newItem = _mapper.Map<RequestType, T>(request);
             var result = await _service.Update(id, newItem);
             if (result is null)
                 return NotFound($"{typeof(T).Name} not found.");
@@ -53,7 +57,7 @@ namespace Librarium.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<List<T>>> Delete(string id)
+        public virtual async Task<ActionResult<List<T>>> Delete(string id)
         {
             var result = await _service.Delete(id);
             if (result is null)

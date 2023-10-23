@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Librarium.Services
 {
-    public class ImageService : Service<Image, DefaultFilter>
+    public class AppFileService : Service<AppFile, DefaultFilter>
     {
-        public ImageService(DataContext context) : base(context) { }
+        public AppFileService(DataContext context) : base(context) { }
     }
 
 }

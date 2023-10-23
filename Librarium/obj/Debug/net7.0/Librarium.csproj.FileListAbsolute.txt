@@ -83,3 +83,4 @@ C:\Users\IsmayilMusayev\Desktop\RustamInternship\librarium\Librarium\obj\Debug\n
 C:\Users\IsmayilMusayev\Desktop\RustamInternship\librarium\Librarium\obj\Debug\net7.0\Librarium.genruntimeconfig.cache
 C:\Users\IsmayilMusayev\Desktop\RustamInternship\librarium\Librarium\obj\Debug\net7.0\ref\Librarium.dll
 C:\Users\IsmayilMusayev\Desktop\RustamInternship\librarium\Librarium\bin\Debug\net7.0\AutoMapper.dll
+C:\Users\IsmayilMusayev\Desktop\RustamInternship\librarium\Librarium\bin\Debug\net7.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

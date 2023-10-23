@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./Book.css";
 import { Card } from "react-bootstrap";
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Badge from "react-bootstrap/Badge";
 import { Tooltip } from "react-tooltip";
+import { GetData, Initialize } from "./BackEndApi";
 // import genres from "./genres.json";
 
 export default function Book({ book, bookStyle = {} }) {
@@ -29,18 +30,19 @@ export default function Book({ book, bookStyle = {} }) {
   function Genre({ genre }) {
     return (
       <Badge bg="primary" className="genre">
-        <h6>{genre.name}</h6>
+        <h6>{genre?.name}</h6>
       </Badge>
     );
   }
 
   function Language({ language }) {
-    let languageUrl = language.image.url;
-    let languageFullName = language.name;
+    let languageUrl = language?.image?.url;
+    let languageFullName = language?.name;
     return (
       <>
         <img
           src={languageUrl}
+          alt=""
           className="ms-2 language"
           data-tooltip-id="language-tooltip"
           data-tooltip-content={languageFullName}
@@ -63,9 +65,9 @@ export default function Book({ book, bookStyle = {} }) {
             <Badge bg="none" style={{ top: 0 }}>
               GET FOR
             </Badge>
-            <Badge bg={price == 0 ? "danger" : "success"} style={{ top: 0 }}>
+            <Badge bg={price === 0 ? "danger" : "success"} style={{ top: 0 }}>
               {" "}
-              {price == 0 ? "FREE" : price + " USD"}
+              {price === 0 ? "FREE" : price + " USD"}
             </Badge>
           </div>
         </Button>
@@ -125,18 +127,26 @@ export default function Book({ book, bookStyle = {} }) {
     );
   }
 
+  const [genre, setGenre] = useState();
+  const [language, setLanguage] = useState();
+  const [image, setImage] = useState();
+
+  useEffect(() => {
+    Initialize(setGenre, "Genre", "", book.genreId);
+    Initialize(setLanguage, "Language", "", book.languageId);
+    Initialize(setImage, "Image", "", book.ImageId);
+  }, [book]);
+
   let price = book.price;
   let rating = book.rating;
   let title = book.title;
-  let language = book.language;
   let author = book.author;
   let publicationYear = book.publicationYear;
-  let img = book.image?.url;
+  let img = image?.url;
   if (img == null)
     img =
       "https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-1-scaled.png";
   let description = book.description;
-  let genre = book.genre;
   // Only for tests end
 
   return (

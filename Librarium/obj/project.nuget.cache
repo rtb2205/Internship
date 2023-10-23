@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "7s1D2XUC7WIHKgrII57dduWVr6AQSFlORnCsXURANf1ER7b9bUtLyapZt5zuOgpxL++FtgJkUzcyGxDOtXMKgg==",
+  "dgSpecHash": "Octfn4oVNmg2wm193jx6OfLPfUcgar6cN/iYjxlm8EMcPx33V+T3UHxODogXL3aGLnv2wh0lVUkzuKkRZ45zzw==",
   "success": true,
   "projectFilePath": "C:\\Users\\IsmayilMusayev\\Desktop\\RustamInternship\\librarium\\Librarium\\Librarium.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\IsmayilMusayev\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\IsmayilMusayev\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\IsmayilMusayev\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\IsmayilMusayev\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
     "C:\\Users\\IsmayilMusayev\\.nuget\\packages\\entityframework\\6.4.4\\entityframework.6.4.4.nupkg.sha512",

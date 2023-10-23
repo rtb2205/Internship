@@ -11,8 +11,21 @@ namespace Librarium.Services
         protected override IQueryable<Language> ApplyInclude(IQueryable<Language> query)
         {
             return query
-                .Include(b => b.Image);
+                .Include(b => b.AppFile);
         }
+
+        public override async Task<string?> AttachAppFile(string appFileId, string OwnerId)
+        {
+            var result = await _dbSet.FindAsync(OwnerId);
+            if (result == null)
+            {
+                return null;
+            }
+            result.AppFileId = appFileId;
+            await _context.SaveChangesAsync();
+            return result.AppFileId;
+        }
+
 
     }
 

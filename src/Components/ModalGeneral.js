@@ -1,85 +1,117 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from "react";
+import Book from "./Book";
+import { AddData, DeleteData, Initialize, UpdateData } from "./BackEndApi";
+import { Button, Form, Modal } from "react-bootstrap";
+import { GenresContext, LanguageContext } from "./Contexts";
 
-export default function ModalGeneral({ text, variant, body = {}, booksArray }) {
-  if (text === "Add") {
-    let max = 0;
-    for (let i = 0; i < booksArray.length; i++) {
-      if (booksArray[i].id > max) max = booksArray[i].id;
-    }
+export default function ModalGeneral({ variant, close, book = {} }) {
+  let genres = useContext(GenresContext);
+  let languages = useContext(LanguageContext);
 
-    let id = max + 1;
-    body = {
-      id: id,
+  const variantToQueryPair = {
+    Add: AddData,
+    Remove: DeleteData,
+    Edit: UpdateData,
+  };
+  if (variant === "Add") {
+    book = {
       title: "",
       isbn: "",
-      title: "",
       author: "",
-      publicationYear: "2000",
-      genre: "1",
-      language: "az",
-      rating: "",
+      publicationYear: "",
+      genreId: "",
+      languageId: null,
+      image: "",
+      imageId: "",
+      rating: 0,
       price: 0,
+      description: "",
     };
   }
 
-  const [show, setShow] = useState(false);
-  const [currentBook, setCurrentBook] = useState(body);
+  // const [show, setShow] = useState(true);
+  const [currentBook, setCurrentBook] = useState(book);
 
   const handleClose = () => {
-    setShow(false);
-    setCurrentBook(body);
+    close();
   };
-
-  const handleShow = () => setShow(true);
 
   function formFieldChangeHandler(event) {
     const { name, value } = event.target;
     setCurrentBook((prevData) => ({ ...prevData, [name]: value }));
   }
 
-  let formFields = [];
+  const [fieldsWithSelectors, setFieldsWithSelectors] = useState({
+    genreId: genres,
+    languageId: languages,
+  });
+  const [toBeIgnoredFields, setToBeIgnoredFields] = useState([
+    "genre",
+    "language",
+    "id",
+  ]);
+  const [toBeModifiedNames, setToBeModifiedNames] = useState({
+    genreId: "Genre",
+    languageId: "Language",
+    publicationYear: "Publication Year",
+  });
+  const [selectorFieldsOptions, setselectorFieldsOptions] = useState(() => {
+    let result = [];
+    for (const [key, value] of Object.entries(fieldsWithSelectors)) {
+      let List = [];
+      List.push(
+        <option key="default" value="" disabled>
+          Select {toBeModifiedNames[key]}
+        </option>
+      );
+      List.push(
+        value.map((item) => {
+          return (
+            <option key={item?.id} value={item?.id}>
+              {item?.name}
+            </option>
+          );
+        })
+      );
+      result.push({ key: key, value: List });
+    }
+    return result;
+  });
+
   let modalBody;
-  let handleType = "added";
-
-  switch (text) {
-    case "Remove": {
-      handleType = "deleted";
-      break;
-    }
-    case "Add": {
-      handleType = "added";
-      break;
-    }
-    case "Change": {
-      handleType = "changed";
-      break;
-    }
-  }
-
-  let handleSubmit = (modifiedBook) => {
-    dispatch({
-      type: handleType,
-      book: modifiedBook,
-    });
+  let handleSubmit = async (modifiedBook, id) => {
+    const args = {
+      dbSetName: "Book",
+      body: modifiedBook,
+      id: id,
+    };
+    debugger;
+    await variantToQueryPair[variant](args);
   };
-  if (text != "Remove") {
-    for (const [key, value] of Object.entries(currentBook)) {
-      if (key == "genre" || key == "language") {
-        const List = eval(key + "s").map((item) => {
-          return <option value={item?.id}> {item?.name}</option>;
-        });
 
+  let formFields = [];
+  if (variant !== "Remove") {
+    for (const [key, value] of Object.entries(book)) {
+      if (toBeIgnoredFields.find((item) => item === key)) continue;
+      let fieldWithSelector = fieldsWithSelectors[key];
+      let label = toBeModifiedNames[key] ?? key;
+
+      //checking if current field is a list of options
+      if (fieldWithSelector !== undefined) {
         formFields.push(
           <Form.Group className="mb-3">
             <Form.Label>
-              {key.charAt(0).toUpperCase() + key.slice(1).toLowerCase()}
+              {label.charAt(0).toUpperCase() + label.slice(1).toLowerCase()}
             </Form.Label>
             <Form.Select
               name={key}
-              value={value}
+              defaultValue={value ?? ""}
               onChange={formFieldChangeHandler}
             >
-              {List}
+              {
+                selectorFieldsOptions.find((element) => element.key == key)
+                  ?.value
+              }
             </Form.Select>
           </Form.Group>
         );
@@ -98,24 +130,25 @@ export default function ModalGeneral({ text, variant, body = {}, booksArray }) {
         fieldType = {
           as: "textarea",
         };
+      if (key === "image") {
+        fieldType["type"] = "file";
+      }
       formFields.push(
         <Form.Group className="mb-3">
           <Form.Label>
-            {key.charAt(0).toUpperCase() + key.slice(1).toLowerCase()}
+            {label.charAt(0).toUpperCase() + label.slice(1).toLowerCase()}
           </Form.Label>
           <Form.Control
             name={key}
             {...fieldType}
-            placeholder={"Enter " + key}
+            placeholder={"Enter " + label}
             onChange={formFieldChangeHandler}
-            value={value}
+            value={currentBook[key]}
           />
         </Form.Group>
       );
     }
-
     const bookStyle = { position: "fixed", right: "2%", top: "4%" };
-
     modalBody = (
       <Modal.Body className="d-flex">
         <Form className="w-100 flex-grow-1">{formFields}</Form>
@@ -132,18 +165,15 @@ export default function ModalGeneral({ text, variant, body = {}, booksArray }) {
 
   return (
     <>
-      <Button className="m-2" variant={variant} onClick={handleShow}>
-        {text}
-      </Button>
       <Modal
         size="lg"
-        show={show}
+        show={true}
         onHide={handleClose}
         backdrop="static"
         keyboard={true}
       >
         <Modal.Header closeButton>
-          <Modal.Title>{text} book</Modal.Title>
+          <Modal.Title>{variant} book</Modal.Title>
         </Modal.Header>
         {modalBody}
         <Modal.Footer>
@@ -153,8 +183,7 @@ export default function ModalGeneral({ text, variant, body = {}, booksArray }) {
           <Button
             variant="primary"
             onClick={() => {
-              handleSubmit(currentBook);
-              handleClose();
+              handleSubmit(currentBook, book?.id).then(() => handleClose());
             }}
           >
             Submit
