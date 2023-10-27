@@ -22,5 +22,7 @@ namespace Librarium.Data
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Language> Languages { get; set; }
         public DbSet<AppFile> AppFiles { get; set; }
+
+        public DbSet<User> Users { get; set; } 
     }
 }

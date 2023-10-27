@@ -26,6 +26,7 @@ namespace Librarium.Models
         public float Rating { get; set; }
         [Required]
         public float Price { get; set; }
+
         public string? AppFileId { get; set; }
         public AppFile? AppFile { get; set; }
         [Required]

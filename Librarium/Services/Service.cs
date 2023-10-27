@@ -20,19 +20,19 @@ namespace Librarium.Services
 
         public virtual async Task<string?> Add(T item)
         {
-            _dbSet.Add(item);         
+            _dbSet.Add(item);
             await _context.SaveChangesAsync();
             return item.Id;
         }
 
-        public virtual async Task<List<T>?> Delete(string id)
+        public virtual async Task<string?> Delete(string id)
         {
-            var result  = await _dbSet.FindAsync(id);
+            var result = await _dbSet.FindAsync(id);
             if (result is null)
                 return null;
             _dbSet.Remove(result);
             await _context.SaveChangesAsync();
-            return await GetAll();
+            return id + " Successfully deleted";
         }
 
         public virtual async Task<T?> Get(string id)
@@ -41,7 +41,8 @@ namespace Librarium.Services
             result = ApplyInclude(result);
             if (result is null)
                 return null;
-            return await result.FirstOrDefaultAsync(e => e.Id == id);
+            var temp = await result.FirstOrDefaultAsync(e => e.Id == id);
+            return temp;
         }
 
         public virtual async Task<List<T>> GetAll(FilterType? filter = null)
@@ -63,7 +64,7 @@ namespace Librarium.Services
 
             var requestType = request.GetType();
             var resultProperties = typeof(T).GetProperties();
-           
+
             foreach (var requestProperty in requestType.GetProperties())
             {
                 var resultProperty = resultProperties.FirstOrDefault(prop => prop.Name == requestProperty.Name);
@@ -72,7 +73,7 @@ namespace Librarium.Services
                     var value = requestProperty.GetValue(request);
                     if (requestProperty.Name == "Id")
                         continue;
-                        resultProperty.SetValue(result, value);
+                    resultProperty.SetValue(result, value);
                 }
             }
             await _context.SaveChangesAsync();
@@ -89,5 +90,9 @@ namespace Librarium.Services
         {
             return await Task.FromResult("");
         }
+
+        public virtual async Task<string> SaveInServer(AppFileRequest request, AppFile item)
+
+        { return await Task.FromResult(""); }
     }
 }

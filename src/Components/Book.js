@@ -5,8 +5,7 @@ import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Badge from "react-bootstrap/Badge";
 import { Tooltip } from "react-tooltip";
-import { GetData, Initialize } from "./BackEndApi";
-// import genres from "./genres.json";
+import { Initialize } from "./BackEndApi";
 
 export default function Book({ book, bookStyle = {} }) {
   function Rating({ rating }) {
@@ -35,13 +34,12 @@ export default function Book({ book, bookStyle = {} }) {
     );
   }
 
-  function Language({ language }) {
-    let languageUrl = language?.image?.url;
+  function Language({ language, languageId }) {
     let languageFullName = language?.name;
     return (
       <>
         <img
-          src={languageUrl}
+          src={"http://localhost:5157/languageGetFile/" + languageId}
           alt=""
           className="ms-2 language"
           data-tooltip-id="language-tooltip"
@@ -65,9 +63,8 @@ export default function Book({ book, bookStyle = {} }) {
             <Badge bg="none" style={{ top: 0 }}>
               GET FOR
             </Badge>
-            <Badge bg={price === 0 ? "danger" : "success"} style={{ top: 0 }}>
-              {" "}
-              {price === 0 ? "FREE" : price + " USD"}
+            <Badge bg={price == 0 ? "danger" : "success"} style={{ top: 0 }}>
+              {price == 0 ? "FREE" : price + " USD"}
             </Badge>
           </div>
         </Button>
@@ -111,7 +108,7 @@ export default function Book({ book, bookStyle = {} }) {
     );
   }
 
-  function BookHeader({ language, author, date }) {
+  function BookHeader({ language, languageId, author, date }) {
     return (
       <div className="w-100 d-flex mb-3 justify-content-between">
         <div className="me-2" style={{ fontSize: "1.2vw", opacity: 0.3 }}>
@@ -122,7 +119,7 @@ export default function Book({ book, bookStyle = {} }) {
           {author}
         </div>
         <>•</>
-        <Language language={language}></Language>
+        <Language language={language} languageId={languageId}></Language>
       </div>
     );
   }
@@ -134,21 +131,27 @@ export default function Book({ book, bookStyle = {} }) {
   useEffect(() => {
     Initialize(setGenre, "Genre", "", book.genreId);
     Initialize(setLanguage, "Language", "", book.languageId);
-    Initialize(setImage, "Image", "", book.ImageId);
+    // if (book.ImageId) Initialize(setImage, "AppFile", "", book.ImageId);
+    // else setImage(book.Image);
   }, [book]);
 
+  const filePath = book.appFile?.path + book.appFile?.name;
   let price = book.price;
   let rating = book.rating;
   let title = book.title;
   let author = book.author;
   let publicationYear = book.publicationYear;
-  let img = image?.url;
-  if (img == null)
-    img =
-      "https://www.salonlfc.com/wp-content/uploads/2018/01/image-not-found-1-scaled.png";
-  let description = book.description;
-  // Only for tests end
+  let img = filePath;
 
+  let description = book.description;
+
+  function whichImage(img) {
+    let src = "";
+    if (!img) src = "./img/not-found.png";
+    else src = "http://localhost:5157/bookGetFile/" + book.id;
+
+    return src;
+  }
   return (
     <Card
       style={bookStyle}
@@ -159,13 +162,14 @@ export default function Book({ book, bookStyle = {} }) {
       <div className="my-cover-container position-relative container-fluid">
         <Rating rating={rating} />
         <Description text={description} />
-        <Card.Img className="card-image" src={img} />
+        <Card.Img className="card-image" src={whichImage(img)} />
         <Genre genre={genre} />
       </div>
       <Card.Body className="d-flex flex-column align-items-center  text-wrap">
         <Card.Title className="w-100">{title}</Card.Title>
         <BookHeader
           language={language}
+          languageId={book.languageId}
           author={author}
           date={publicationYear}
         ></BookHeader>

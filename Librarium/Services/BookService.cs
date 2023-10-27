@@ -9,19 +9,14 @@ namespace Librarium.Services
     {
 
         public BookService(DataContext context) : base(context)
-        {
-
-        }
-        public override async Task<string?> Add(Book item)
-        {
-            _dbSet.Add(item);
-            await _context.SaveChangesAsync();
-            return item.Id;
-        }
+        { }
         protected override IQueryable<Book> ApplyInclude(IQueryable<Book> query)
         {
             return query
-                .Include(b => b.Genre).Include(b => b.Language).Include(b=>b.AppFile).Include(b => (b!.Language).AppFile);
+                .Include(b => b.Genre)
+                .Include(b => b.Language)
+                .ThenInclude(l => l.AppFile)
+                .Include(b=>b.AppFile);
         }
         protected override IQueryable<Book> ApplyFilter(IQueryable<Book> query, BooksFilter? filter = null)
         {
@@ -37,13 +32,13 @@ namespace Librarium.Services
                 query = query.Where(b => b.Rating >= filter.Rating);
             return query;
         }
+
         public override async Task<string?> AttachAppFile(string appFileId, string OwnerId)
         {
             var result = await _dbSet.FindAsync(OwnerId);
             if (result == null)
-            {
                 return null;
-            }
+
             result.AppFileId = appFileId;
             await _context.SaveChangesAsync();
             return result.AppFileId;

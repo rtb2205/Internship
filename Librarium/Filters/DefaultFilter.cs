@@ -1,5 +1,5 @@
 ﻿namespace Librarium.Filters;
 
-public class DefaultFilter
+public class DefaultFilter: IFilter
 {
 }

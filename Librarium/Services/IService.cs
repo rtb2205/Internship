@@ -10,7 +10,7 @@ namespace Librarium.Services
         Task<T?> Get(string id);
         Task<string?> Add(T item);
         Task<string?> Update(string id, T request);
-        Task<List<T>?> Delete(string id);
+        Task<string?> Delete(string id);
 
         }
 }

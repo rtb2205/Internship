@@ -11,7 +11,7 @@ namespace Librarium.Controllers
     [ApiController]
     public class GenreController : MyController<Genre, GenreRequest, GenreResponse, DefaultFilter>
     {
-        public GenreController(Service<Genre, DefaultFilter> service, IMapper mapper) : base(service, mapper) { }
+        public GenreController(Service<Genre, DefaultFilter> service) : base(service) { }
 
         
     }

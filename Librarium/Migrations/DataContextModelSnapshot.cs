@@ -128,6 +128,28 @@ namespace Librarium.Migrations
                     b.ToTable("Languages");
                 });
 
+            modelBuilder.Entity("Librarium.Models.User", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("Librarium.Models.Book", b =>
                 {
                     b.HasOne("Librarium.Models.AppFile", "AppFile")

@@ -3,9 +3,12 @@ import Home from "./Home";
 import Login from "./Login";
 import AdminPanel from "./AdminPanel";
 import { Navigate } from "react-router-dom";
+import Authorization from "./Authorization";
 
 export default function App() {
+  localStorage.setItem("admin", true);
   return (
+    // <Authorization></Authorization>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />

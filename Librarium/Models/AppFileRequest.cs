@@ -5,6 +5,6 @@ namespace Librarium.Models
     public class AppFileRequest
     {
         [Required]
-        public FormFile? FormFile { get; set; }
+        public IFormFile? file { get; set; }
     }
 }

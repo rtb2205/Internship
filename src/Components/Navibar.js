@@ -1,21 +1,42 @@
 import React, { useEffect, useState } from "react";
 import { Button, Container, Nav, Navbar, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import { AddData } from "./BackEndApi";
 
 export default function NaviBar() {
   let navigate = useNavigate();
-  const [password, setPassword] = useState("");
+  const [userLoginData, setUserLoginData] = useState({
+    username: "",
+    password: "",
+  });
   const [isAdmin, setIsAdmin] = useState(
     localStorage.getItem("admin") === "true"
   );
 
-  function handleLogIn() {
-    if (password === "Adm123!") {
-      localStorage.setItem("admin", true);
-      setIsAdmin(true);
-    }
+  async function handleLogIn() {
+    console.log(userLoginData);
+    var params = {
+      dbSetName: "login",
+      body: userLoginData,
+    };
+    var response = await AddData(params);
+    console.log(response);
+    sessionStorage.setItem("AccessToken", JSON.stringify(response.AccessToken));
+    // let endpoint = "http://localhost:5157/api/login";
+
+    // let response = await fetch(endpoint, {
+    //   method: "POST",
+    //   body: JSON.stringify(userLoginData),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // });
+
+    // if (password === "Adm123!") {
+    //   localStorage.setItem("admin", true);
+    //   setIsAdmin(true);
+    // }
   }
-  
 
   function handleLogOut() {
     localStorage.setItem("admin", false);
@@ -51,8 +72,25 @@ export default function NaviBar() {
               {!isAdmin && (
                 <>
                   <Form.Control
+                    type="username"
+                    placeholder="Username..."
+                    onChange={(event) =>
+                      setUserLoginData({
+                        ...userLoginData,
+                        username: event.target.value,
+                      })
+                    }
+                    className="h-100"
+                  />
+                  <Form.Control
                     type="password"
-                    onChange={(event) => setPassword(event.target.value)}
+                    placeholder="Password..."
+                    onChange={(event) =>
+                      setUserLoginData({
+                        ...userLoginData,
+                        password: event.target.value,
+                      })
+                    }
                     className="h-100"
                   />
                   <Button

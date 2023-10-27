@@ -31,7 +31,7 @@ export default function BookShelf() {
       }
     }
     paramString = paramString.slice(1);
-    Initialize(setFilteredBooks,"Book", paramString);
+    Initialize(setFilteredBooks, "Book", paramString);
     setFilter((prevValue) => ({ ...prevValue, isApplied: true }));
     setCurPage(1);
   }, [filter.isApplied]);
@@ -75,7 +75,11 @@ export default function BookShelf() {
 
   let visibleBooks = slicedBooks();
   visibleBooks = visibleBooks.map((item) => {
-    return <Book key={item.Id} book={item} />;
+    return (
+      <div className="m-2">
+        <Book key={item.Id} book={item} />;
+      </div>
+    );
   });
   return (
     <Container fluid className="d-flex">

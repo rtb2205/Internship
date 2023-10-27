@@ -11,6 +11,7 @@ namespace Librarium.Models
 
         [Required]
         public string? Name { get; set; }
+
         public string? AppFileId { get; set; }
         public AppFile? AppFile { get; set; }
     }

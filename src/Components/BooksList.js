@@ -34,18 +34,29 @@ export default function BooksList() {
   }, [refreshed]);
 
   function DataString({ bookData }) {
+    let bookParam = {
+      id: bookData.id,
+      isbn: bookData.isbn,
+      title: bookData.title,
+      author: bookData.author,
+      publicationYear: bookData.publicationYear,
+      genreId: bookData.genre.id,
+      languageId: bookData.language.id,
+      rating: bookData.rating,
+      price: bookData.price,
+      description: bookData.description,
+      appFile: bookData.appFile ?? null,
+    };
     return (
       <tr>
         <td>{bookData.isbn}</td>
         <td>{bookData.title}</td>
-        <td>{bookData.author}</td>
-        <td>{bookData.publicationYear}</td>
-        <td>{bookData.genre.name}</td>
-        <td>{bookData.language.name}</td>
-        <td>{bookData.rating}</td>
-        <td>{bookData.price}</td>
-        <td>
-          <img style={{ width: "100%" }} alt="" src={bookData.image?.url}></img>
+        <td style={{ width: "10em" }}>
+          <img
+            style={{ width: "100%" }}
+            alt=""
+            src={"http://localhost:5157/getFile/" + bookData.id}
+          ></img>
         </td>
         <td>{bookData.description}</td>
         <td>
@@ -54,7 +65,7 @@ export default function BooksList() {
             className="m-2"
             variant="secondary"
             onClick={() => {
-              openModal("Edit", bookData);
+              openModal("Edit", bookParam);
             }}
           >
             Edit
@@ -63,7 +74,7 @@ export default function BooksList() {
             className="m-2"
             variant="danger"
             onClick={() => {
-              openModal("Remove", bookData);
+              openModal("Remove", bookParam);
             }}
           >
             Remove
@@ -74,17 +85,9 @@ export default function BooksList() {
   }
 
   let mainData = booksArray.map((book) => {
-    return (
-      <DataString
-        bookData={book}
-        key={book.id}
-        setBooksArray={setBooksArray}
-        booksArray={booksArray}
-      />
-    );
+    return <DataString bookData={book} key={book.id} />;
   });
 
-  // debugger;
   if (!refreshed) return <></>;
   else
     return (
@@ -102,12 +105,7 @@ export default function BooksList() {
               <tr>
                 <th>Isbn</th>
                 <th>Title</th>
-                <th>Author</th>
-                <th>Publication year</th>
-                <th>Genre</th>
-                <th>Language</th>
-                <th>Rating</th>
-                <th>Price</th>
+
                 <th>Image</th>
                 <th>Description</th>
                 <th style={{ width: "12%" }}>Manage</th>

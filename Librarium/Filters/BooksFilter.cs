@@ -1,6 +1,8 @@
-﻿namespace Librarium.Models;
+﻿using Librarium.Filters;
 
-public class BooksFilter
+namespace Librarium.Models;
+
+public class BooksFilter: IFilter
 {
     public string? Title { get; set; }
     public float? Rating { get; set; }

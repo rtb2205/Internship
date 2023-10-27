@@ -18,14 +18,12 @@ namespace Librarium.Services
         {
             var result = await _dbSet.FindAsync(OwnerId);
             if (result == null)
-            {
                 return null;
-            }
+
             result.AppFileId = appFileId;
             await _context.SaveChangesAsync();
             return result.AppFileId;
         }
-
 
     }
 
