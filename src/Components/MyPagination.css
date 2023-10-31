@@ -1,0 +1,24 @@
+.pagination-container {
+  display: flex;
+  list-style-type: none;
+}
+.page-item {
+  text-decoration: none;
+  color: white;
+  padding: 0.5em;
+}
+
+.page-item:hover {
+  background-color: rgba(0, 57, 138, 0.445);
+  color: white;
+}
+
+.page-active {
+  background-color: cadetblue;
+  color: white;
+}
+
+.break-item {
+  color: white;
+  padding: 0 2px;
+}

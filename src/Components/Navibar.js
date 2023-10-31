@@ -14,28 +14,12 @@ export default function NaviBar() {
   );
 
   async function handleLogIn() {
-    console.log(userLoginData);
     var params = {
       dbSetName: "login",
       body: userLoginData,
     };
     var response = await AddData(params);
-    console.log(response);
     sessionStorage.setItem("AccessToken", JSON.stringify(response.AccessToken));
-    // let endpoint = "http://localhost:5157/api/login";
-
-    // let response = await fetch(endpoint, {
-    //   method: "POST",
-    //   body: JSON.stringify(userLoginData),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // });
-
-    // if (password === "Adm123!") {
-    //   localStorage.setItem("admin", true);
-    //   setIsAdmin(true);
-    // }
   }
 
   function handleLogOut() {

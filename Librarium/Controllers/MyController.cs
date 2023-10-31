@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Azure.Core;
 using Helpers.AutoMapperProfiles;
+using Librarium.Filters;
 using Librarium.Models;
 using Librarium.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -22,11 +23,6 @@ namespace Librarium.Controllers
             _service = service;
         }
 
-        [HttpGet]
-        public virtual async Task<ActionResult<List<T>>> GetAll([FromQuery]FilterType? filter = null)
-        {
-            return await _service.GetAll(filter);
-        }
 
         [HttpGet("{id}")]
         public virtual async Task<ActionResult<T>> Get(string id)
@@ -60,7 +56,7 @@ namespace Librarium.Controllers
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
-        public virtual async Task<ActionResult<List<T>>> Delete(string id)
+        public virtual async Task<ActionResult<string>> Delete(string id)
         {
             var result = await _service.Delete(id);
             if (result is null)

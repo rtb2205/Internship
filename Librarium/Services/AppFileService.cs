@@ -33,13 +33,10 @@ namespace Librarium.Services
             var filePath = file.Path;
             var result = await base.Delete(id);
 
-            using (FileStream fs = new FileStream(filePath + "\\" + file.Name, FileMode.Open, FileAccess.Write, FileShare.None))
+            if (File.Exists("./uploads/" + file.Name))
             {
-                if (File.Exists(filePath + "\\" + file.Name + "." + file.Extension))
-                {
-                   /* System.IO.File.Delete(filePath + "\\" + file.Name + "." + file.Extension);*/
-                    return result;
-                }
+                File.Delete("./uploads/" + file.Name);
+                return result;
             }
             return $"Error during the deletion of {filePath}";
         }

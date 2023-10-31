@@ -17,7 +17,11 @@ namespace Librarium.Controllers
             _appFileService = appFileService;
         }
 
-
+        [HttpGet]
+        public virtual async Task<ActionResult<List<Language>>> GetAll([FromQuery] DefaultFilter? filter = null)
+        {
+            return await _service.GetAll(filter);
+        }
 
         [HttpPost("addApplicationFile/{id}")]
         public virtual async Task<ActionResult<Book>> Post(string id, [FromForm] AppFileRequest appFileRequest)

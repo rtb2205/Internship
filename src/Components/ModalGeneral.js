@@ -7,18 +7,17 @@ import { GenresContext, LanguageContext } from "./Contexts";
 export default function ModalGeneral({ variant, close, book = {} }) {
   let genres = useContext(GenresContext);
   let languages = useContext(LanguageContext);
-  const [currentBook, setCurrentBook] = useState(book);
   //позже поменять
   const [selectedImage, setSelectedImage] = useState(null);
-  const fileInputRef = useRef();
+  const fileInputRef = useRef(null);
   //позже поменятьs
 
   const variantToQueryPair = {
     Add: async (params) => {
       var id = await AddData(params);
-      if (fileInputRef.current != null) {
+      if (fileInputRef.current?.files[0] != undefined) {
         const formData = new FormData();
-        debugger;
+
         formData.append("file", fileInputRef.current.files[0]);
         params.body = formData;
         await AttachAppFile(params, id);
@@ -27,9 +26,16 @@ export default function ModalGeneral({ variant, close, book = {} }) {
     Remove: DeleteData,
     Edit: async (params) => {
       await UpdateData(params);
-      if (fileInputRef.current != null) {
+      if (fileInputRef.current?.files[0] != undefined) {
         const formData = new FormData();
         formData.append("file", fileInputRef.current.files[0]);
+        console.log(fileInputRef.current.files[0]);
+        params.body = formData;
+        await AttachAppFile(params, params.id);
+      } else if (currentBook.appFile != null) {
+        const formData = new FormData();
+        var curImage = "http://localhost:5157/bookGetFile/" + currentBook.id;
+        formData.append("file", curImage);
         params.body = formData;
         await AttachAppFile(params, params.id);
       }
@@ -52,6 +58,8 @@ export default function ModalGeneral({ variant, close, book = {} }) {
       description: "",
     };
   }
+  const [currentBook, setCurrentBook] = useState(book);
+  console.log("CurBook >>> ", currentBook);
   const handleClose = () => {
     close();
   };
@@ -254,7 +262,7 @@ export default function ModalGeneral({ variant, close, book = {} }) {
           </Button>
           <Button
             variant="primary"
-            onClick={() => {
+            onClick={async () => {
               handleSubmit(currentBook, book?.id).then(() => handleClose());
             }}
           >

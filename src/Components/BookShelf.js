@@ -1,14 +1,17 @@
 import Book from "./Book";
 import React, { useContext, useEffect } from "react";
-import { Container, Pagination } from "react-bootstrap";
+import { Container } from "react-bootstrap";
+import ReactPaginate from "react-paginate";
 import FilterForm from "./FilterForm";
 import { useState } from "react";
 import { Initialize } from "./BackEndApi";
+import "./MyPagination.css";
 
 export default function BookShelf() {
-  const booksPerPage = 8;
+  // const [booksPerPage, setBooksPerPage] = useState(1);
+  const [pagesAmount, setPagesAmount] = useState(1);
   const [filteredBooks, setFilteredBooks] = useState([]);
-  const [curPage, setCurPage] = useState(1);
+  // const [curPage, setCurPage] = useState(1);
   const [filter, setFilter] = useState({
     title: "",
     price: "",
@@ -16,9 +19,9 @@ export default function BookShelf() {
     genreId: "All",
     languageId: "All",
     isApplied: false,
+    currentPage: 1,
+    booksPerPage: 4,
   });
-
-  let totalFiltered = filteredBooks.length;
 
   useEffect(() => {
     if (filter.isApplied) return;
@@ -30,57 +33,34 @@ export default function BookShelf() {
         paramString += `&${key}=${filterValue}`;
       }
     }
+
     paramString = paramString.slice(1);
-    Initialize(setFilteredBooks, "Book", paramString);
-    setFilter((prevValue) => ({ ...prevValue, isApplied: true }));
-    setCurPage(1);
+    let paginationData = Initialize(setFilteredBooks, "Book", paramString).then(
+      (res) => {
+        setPagesAmount(res.pagesAmount);
+        setFilter((prevValue) => ({
+          ...prevValue,
+          booksPerPage: res.booksPerPage,
+          currentPage: res.currentPage,
+          isApplied: true,
+        }));
+      }
+    );
   }, [filter.isApplied]);
 
-  function slicedBooks() {
-    let bookAmount = filteredBooks.length;
-    let shelfBooks = [];
-
-    let start = (curPage - 1) * 8;
-    let end = Math.min(start + 7, bookAmount - 1);
-
-    for (let i = start; i <= end; i++) {
-      shelfBooks.push(filteredBooks[i]);
-    }
-
-    return shelfBooks;
-  }
-
-  let items = [];
-
-  function handlePageClick(number) {
-    setCurPage(number);
-    visibleBooks.slice((curPage - 1) * booksPerPage, curPage * booksPerPage);
-  }
-
-  for (
-    let number = 1;
-    number <= Math.ceil(totalFiltered / booksPerPage);
-    number++
-  ) {
-    items.push(
-      <Pagination.Item
-        key={number}
-        active={number === curPage}
-        onClick={() => handlePageClick(number)}
-      >
-        {number}
-      </Pagination.Item>
-    );
-  }
-
-  let visibleBooks = slicedBooks();
-  visibleBooks = visibleBooks.map((item) => {
+  let visibleBooks = filteredBooks.map((item) => {
     return (
       <div className="m-2">
         <Book key={item.Id} book={item} />;
       </div>
     );
   });
+
+  function handlePageClick(selected) {
+    let number = selected.selected + 1;
+    setFilter({ ...filter, isApplied: false, currentPage: number });
+  }
+
   return (
     <Container fluid className="d-flex">
       <FilterForm filter={filter} setFilter={setFilter} />
@@ -91,7 +71,23 @@ export default function BookShelf() {
         >
           {visibleBooks}
         </Container>
-        <Pagination className="m-2"> {items}</Pagination>
+        <>
+          <ReactPaginate
+            nextLabel="next >"
+            onPageChange={handlePageClick}
+            pageRangeDisplayed={3}
+            pageCount={pagesAmount}
+            previousLabel="< previous"
+            renderOnZeroPageCount={null}
+            containerClassName="pagination-container"
+            pageLinkClassName="page-item"
+            previousLinkClassName="page-item"
+            breakLabel="..."
+            breakClassName="break-item"
+            nextLinkClassName="page-item"
+            activeLinkClassName="page-active"
+          />
+        </>
       </div>
     </Container>
   );

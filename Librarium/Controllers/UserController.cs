@@ -11,5 +11,10 @@ namespace Librarium.Controllers
     {
         public UserController(Service<User, DefaultFilter> service) : base(service) { }
 
+        [HttpGet]
+        public virtual async Task<ActionResult<List<User>>> GetAll([FromQuery] DefaultFilter? filter = null)
+        {
+            return await _service.GetAll(filter);
+        }
     }
 }

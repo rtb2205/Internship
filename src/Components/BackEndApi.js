@@ -5,6 +5,14 @@ export async function GetData(dbSetName, id = "", filter = "") {
     dbSetName +
     (id !== "" ? "/" + id : "") +
     (filter !== "" ? "?" + filter : "");
+
+  if (dbSetName === "Book") {
+    let res = await fetch(url).then((data) => data.json());
+    let books = res.item1;
+
+    let paginationData = res.item2;
+    return { books, paginationData };
+  }
   return await fetch(url).then((data) => data.json());
 }
 
@@ -12,9 +20,7 @@ export async function UpdateData(params) {
   const dbSetName = params.dbSetName;
   const id = params.id;
   const body = JSON.stringify(params.body);
-
   if (id === null) return;
-
   const url =
     "http://localhost:5157/api/" + dbSetName + (id !== "" ? "/" + id : "");
   return await fetch(url, {
@@ -40,7 +46,11 @@ export async function AddData(params) {
         "Bearer " + JSON.parse(sessionStorage.getItem("AccessToken")),
     },
     body: body,
-  }).then((data) => data.json());
+  }).then((data) => {
+    if (dbSetName === "Book") return data.text();
+
+    return data.json();
+  });
 }
 
 export async function AttachAppFile(params, bookId) {
@@ -54,9 +64,7 @@ export async function AttachAppFile(params, bookId) {
     Authorization:
       "Bearer " + JSON.parse(sessionStorage.getItem("AccessToken")),
     body: body,
-  }).then((data) => {
-    data.json();
-  });
+  }).then((data) => data);
 }
 
 export async function DeleteData(params) {
@@ -65,14 +73,12 @@ export async function DeleteData(params) {
   if (id === null) return;
   const url =
     "http://localhost:5157/api/" + dbSetName + (id !== "" ? "/" + id : "");
-  console.log(
-    "DELETE Authorization >>> ",
-    "Bearer " + JSON.parse(sessionStorage.getItem("AccessToken"))
-  );
   return await fetch(url, {
     method: "DELETE",
-    Authorization:
-      "Bearer " + JSON.parse(sessionStorage.getItem("AccessToken")),
+    headers: {
+      Authorization:
+        "Bearer " + JSON.parse(sessionStorage.getItem("AccessToken")),
+    },
   }).then((data) => data);
 }
 
@@ -82,8 +88,15 @@ export async function Initialize(
   filter = "",
   id = ""
 ) {
+  let pagination;
+  let initial;
   if (setter !== null) {
-    const initial = await GetData(dbSetName, id, filter);
-    setter(initial);
+    if (dbSetName === "Book") {
+      let data = await GetData(dbSetName, id, filter);
+      initial = data.books;
+      pagination = data.paginationData;
+    } else initial = await GetData(dbSetName, id, filter);
+    await setter(initial);
+    return pagination;
   }
 }

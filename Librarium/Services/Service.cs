@@ -32,7 +32,7 @@ namespace Librarium.Services
                 return null;
             _dbSet.Remove(result);
             await _context.SaveChangesAsync();
-            return id + " Successfully deleted";
+            return id ;
         }
 
         public virtual async Task<T?> Get(string id)
@@ -79,11 +79,11 @@ namespace Librarium.Services
             await _context.SaveChangesAsync();
             return id;
         }
-        protected virtual IQueryable<T> ApplyInclude(IQueryable<T> query)
+        public virtual IQueryable<T> ApplyInclude(IQueryable<T> query)
         {
             return query;
         }
-        protected virtual IQueryable<T> ApplyFilter(IQueryable<T> query, FilterType? filter = null)
+        public virtual IQueryable<T> ApplyFilter(IQueryable<T> query, FilterType? filter = null)
         { return query; }
 
         public virtual async Task<string?> AttachAppFile(string appFileId, string OwnerId)

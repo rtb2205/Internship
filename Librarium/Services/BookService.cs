@@ -1,7 +1,7 @@
 ﻿using Librarium.Data;
+using Librarium.Filters;
 using Librarium.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography;
 
 namespace Librarium.Services
 {
@@ -10,16 +10,17 @@ namespace Librarium.Services
 
         public BookService(DataContext context) : base(context)
         { }
-        protected override IQueryable<Book> ApplyInclude(IQueryable<Book> query)
+        public override IQueryable<Book> ApplyInclude(IQueryable<Book> query)
         {
             return query
                 .Include(b => b.Genre)
                 .Include(b => b.Language)
                 .ThenInclude(l => l.AppFile)
-                .Include(b=>b.AppFile);
+                .Include(b => b.AppFile);
         }
-        protected override IQueryable<Book> ApplyFilter(IQueryable<Book> query, BooksFilter? filter = null)
+        protected new Tuple<IQueryable<Book>, PaginationInfo> ApplyFilter(IQueryable<Book> query, BooksFilter? filter = null)
         {
+            var originalCount = query.Count();
             if (!(filter?.GenreId is null))
                 query = query.Where(b => b.GenreId == filter.GenreId);
             if (!(filter?.Price is null))
@@ -30,7 +31,19 @@ namespace Librarium.Services
                 query = query.Where(b => b.LanguageId == filter.LanguageId);
             if (!(filter?.Rating is null))
                 query = query.Where(b => b.Rating >= filter.Rating);
-            return query;
+            
+            var curCount = query.Count();
+            var currentPage = filter.CurrentPage;
+            var booksPerPage = filter.BooksPerPage;
+            var pagesAmount = (int)Math.Ceiling((double)curCount / booksPerPage);
+
+            if (curCount != originalCount)
+            {
+                filter.CurrentPage = 1; 
+            }    
+            
+            query = query.Skip((currentPage - 1) * booksPerPage).Take(currentPage * booksPerPage);
+            return new Tuple<IQueryable<Book>, PaginationInfo> (query,new PaginationInfo { BooksPerPage = booksPerPage, CurrentPage = currentPage, PagesAmount = pagesAmount});
         }
 
         public override async Task<string?> AttachAppFile(string appFileId, string OwnerId)
@@ -43,6 +56,7 @@ namespace Librarium.Services
             await _context.SaveChangesAsync();
             return result.AppFileId;
         }
+
     }
 
 }

@@ -11,6 +11,12 @@ namespace Librarium.Controllers
     [ApiController]
     public class GenreController : MyController<Genre, GenreRequest, GenreResponse, DefaultFilter>
     {
+
+        [HttpGet]
+        public virtual async Task<ActionResult<List<Genre>>> GetAll([FromQuery] DefaultFilter? filter = null)
+        {
+            return await _service.GetAll(filter);
+        }
         public GenreController(Service<Genre, DefaultFilter> service) : base(service) { }
 
         

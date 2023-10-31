@@ -18,7 +18,7 @@ namespace Librarium.Controllers
             _languageService = languageService;
         }
 
-        [HttpGet("/bookGetFile/{bookId}")]
+       [HttpGet("/bookGetFile/{bookId}")]
         public async Task<IActionResult> BookGetFile(string bookId)
         {
             var owner = await _bookService.Get(bookId);
@@ -81,15 +81,11 @@ namespace Librarium.Controllers
             return await Task.FromResult(Forbid("Not allowed to use this method"));
         }
 
-        public override async Task<ActionResult<List<AppFile>>> Delete(string id)
-        {
-            return await Task.FromResult(Forbid("Not allowed to use this method"));
-        }
+        //public override async Task<ActionResult<string>> Delete(string id)
+        //{
+        //    return await Task.FromResult(Forbid("Not allowed to use this method"));
+        //}
 
-        public override async Task<ActionResult<List<AppFile>>> GetAll([FromQuery] DefaultFilter? filter = null)
-        {
-            return await Task.FromResult(Forbid("Not allowed to use this method"));
-        }
     }
 }
 

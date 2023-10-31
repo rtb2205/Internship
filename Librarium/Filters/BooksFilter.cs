@@ -9,4 +9,8 @@ public class BooksFilter: IFilter
     public float? Price { get; set; }
     public string? LanguageId { get; set; }
     public string? GenreId { get; set; }
+
+    public int CurrentPage { get; set; } = 1;
+    public int BooksPerPage { get; set; } = 4;
+    public int BooksAmount { get; set; }
 }

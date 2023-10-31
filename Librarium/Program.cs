@@ -26,7 +26,6 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.Services.AddDbContext<DataContext>();
-
 builder.Services.AddTransient<Service<Book, BooksFilter>, BookService>();
 builder.Services.AddTransient<Service<Genre, DefaultFilter>, GenreService>();
 builder.Services.AddTransient<Service<Language, DefaultFilter>, LanguageService>();
