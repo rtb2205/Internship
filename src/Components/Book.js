@@ -36,10 +36,11 @@ export default function Book({ book, bookStyle = {} }) {
 
   function Language({ language, languageId }) {
     let languageFullName = language?.name;
+
     return (
       <>
         <img
-          src={"http://localhost:5157/languageGetFile/" + languageId}
+          src={"http://localhost:5157/api/Language/GetAppFile/" + languageId}
           alt=""
           className="ms-2 language"
           data-tooltip-id="language-tooltip"
@@ -93,7 +94,7 @@ export default function Book({ book, bookStyle = {} }) {
             onMouseEnter={() => setShowDescription(true)}
             onMouseLeave={() => setShowDescription(false)}
           >
-            <img src="./icons/Other/info-square-fill.svg" alt="Info" />
+            <img src="/icons/Other/info-square-fill.svg" alt="Info" />
           </Button>
         </div>
 
@@ -126,32 +127,33 @@ export default function Book({ book, bookStyle = {} }) {
 
   const [genre, setGenre] = useState();
   const [language, setLanguage] = useState();
-  const [image, setImage] = useState();
 
   useEffect(() => {
     Initialize(setGenre, "Genre", "", book.genreId);
     Initialize(setLanguage, "Language", "", book.languageId);
-    // if (book.ImageId) Initialize(setImage, "AppFile", "", book.ImageId);
-    // else setImage(book.Image);
   }, [book]);
 
-  const filePath = book.appFile?.path + book.appFile?.name;
+  const filePath =
+    // ImageByURL
+    "http://localhost:5157/api/Book/GetAppFile/" + book.id;
   let price = book.price;
   let rating = book.rating;
   let title = book.title;
   let author = book.author;
   let publicationYear = book.publicationYear;
-  let img = filePath;
+  let img = null;
+  if (book.imagePlaceHolder != undefined)
+    img = URL.createObjectURL(book.imagePlaceHolder);
 
   let description = book.description;
 
   function whichImage(img) {
     let src = "";
-    if (!img) src = "./img/not-found.png";
-    else src = "http://localhost:5157/bookGetFile/" + book.id;
-
+    if (!book.appFile && !img) src = "./img/not-found.png";
+    else src = img ?? filePath;
     return src;
   }
+
   return (
     <Card
       style={bookStyle}

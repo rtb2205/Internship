@@ -27,42 +27,42 @@ export async function UpdateData(params) {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
-      Authorization:
-        "Bearer " + JSON.parse(sessionStorage.getItem("AccessToken")),
+      Authorization: "Bearer " + sessionStorage.getItem("AccessToken"),
     },
     body: body,
-  }).then((data) => data);
+  });
 }
 
 export async function AddData(params) {
   const dbSetName = params.dbSetName;
   const body = JSON.stringify(params.body);
   const url = "http://localhost:5157/api/" + dbSetName;
-  return await fetch(url, {
+  let response = await fetch(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization:
-        "Bearer " + JSON.parse(sessionStorage.getItem("AccessToken")),
+      Authorization: "Bearer " + sessionStorage.getItem("AccessToken"),
     },
     body: body,
-  }).then((data) => {
-    if (dbSetName === "Book") return data.text();
-
-    return data.json();
   });
+
+  let data = await response.json();
+  data.responseStatusText = response.statusText;
+  data.responseStatus = response.status;
+  return data;
 }
 
-export async function AttachAppFile(params, bookId) {
-  if (bookId === null) return;
+export async function AttachAppFile(params, ownerId) {
+  if (ownerId === null) return;
   const dbSetName = params.dbSetName;
   const body = params.body;
   const url =
-    "http://localhost:5157/api/" + dbSetName + "/addApplicationFile/" + bookId;
+    "http://localhost:5157/api/" + dbSetName + "/AttachAppFile/" + ownerId;
   return await fetch(url, {
     method: "POST",
-    Authorization:
-      "Bearer " + JSON.parse(sessionStorage.getItem("AccessToken")),
+    headers: {
+      Authorization: "Bearer " + sessionStorage.getItem("AccessToken"),
+    },
     body: body,
   }).then((data) => data);
 }
@@ -76,10 +76,9 @@ export async function DeleteData(params) {
   return await fetch(url, {
     method: "DELETE",
     headers: {
-      Authorization:
-        "Bearer " + JSON.parse(sessionStorage.getItem("AccessToken")),
+      Authorization: "Bearer " + sessionStorage.getItem("AccessToken"),
     },
-  }).then((data) => data);
+  });
 }
 
 export async function Initialize(
@@ -99,4 +98,31 @@ export async function Initialize(
     await setter(initial);
     return pagination;
   }
+}
+
+export function GetToastData(data) {
+  let result;
+  const regexError = /^[4-5]0\d$/;
+  const regexSuccess = /^2\d{2}$/;
+  const statusCode = data.responseStatus;
+  const isMatchError = regexError.test(statusCode);
+  const isMatchSuccess = regexSuccess.test(statusCode);
+  const statusText = data.responseStatusText;
+
+  console.log("GetToastData >>> ", data);
+  let messageText = "";
+  if (data.errors)
+    for (const [key, value] of Object.entries(data.errors)) {
+      messageText += " " + value;
+    }
+
+  result = {
+    variant: isMatchError ? "danger" : isMatchSuccess ? "success" : "warning",
+    messageText:
+      statusText.toLowerCase() == "ok"
+        ? "Success!!!"
+        : messageText ?? statusText,
+  };
+
+  return result;
 }

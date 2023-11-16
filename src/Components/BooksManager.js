@@ -3,11 +3,11 @@ import "./Slider.css";
 import { useState } from "react";
 import { Button, Table } from "react-bootstrap";
 import { Initialize } from "./BackEndApi";
-import ModalGeneral from "./ModalGeneral";
+import BookModal from "./BookModal";
 import { GenresContext, LanguageContext } from "./Contexts";
 import ReactPaginate from "react-paginate";
 
-export default function BooksList() {
+export default function BooksManager() {
   const [pagesAmount, setPagesAmount] = useState(1);
   const [languages, setLanguages] = useState([]);
   const [genres, setGenres] = useState([]);
@@ -81,6 +81,7 @@ export default function BooksList() {
       price: bookData.price,
       description: bookData.description,
       appFile: bookData.appFile ?? null,
+      appFileId: bookData.appFileId ?? null,
     };
     return (
       <tr>
@@ -128,13 +129,6 @@ export default function BooksList() {
   return (
     <>
       <div className="d-flex flex-column align-items-center">
-        <Button
-          onClick={() => {
-            openModal("Add");
-          }}
-        >
-          Add
-        </Button>
         <Table striped bordered hover variant="dark">
           <thead>
             <tr>
@@ -143,7 +137,20 @@ export default function BooksList() {
               {/* 
               <th>Image</th> */}
               <th>Description</th>
-              <th style={{ width: "12%" }}>Manage</th>
+              <th style={{ width: "17%" }}>
+                <div className="d-flex align-items-center justify-content-between">
+                  Manage
+                  <Button
+                    className="position-fixed"
+                    style={{ right: "1%" }}
+                    onClick={() => {
+                      openModal("Add");
+                    }}
+                  >
+                    +
+                  </Button>
+                </div>
+              </th>
             </tr>
           </thead>
           <tbody>{mainData}</tbody>
@@ -167,7 +174,7 @@ export default function BooksList() {
       {isModalOpen && (
         <GenresContext.Provider value={genres}>
           <LanguageContext.Provider value={languages}>
-            <ModalGeneral
+            <BookModal
               variant={variant}
               book={book}
               close={() => {

@@ -16,7 +16,6 @@ export default function Slider() {
   }, []);
 
   const topBooks = books?.sort((a, b) => b.rating - a.rating).slice(0, 5);
-
   return (
     <Container className="p-2 d-flex flex-column align-items-center">
       <OwlCarousel

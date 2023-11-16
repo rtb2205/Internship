@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace Librarium.Models
 {
@@ -16,6 +17,8 @@ namespace Librarium.Models
         public string? GenreId { get; set; }
         [Required]
         public string? LanguageId { get; set; }
+
+        public string? AppFileId { get; set; } 
         [Required]
         public float Rating { get; set; }
         [Required]

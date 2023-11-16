@@ -4,41 +4,35 @@ import { AddData, DeleteData, AttachAppFile, UpdateData } from "./BackEndApi";
 import { Button, Form, Modal } from "react-bootstrap";
 import { GenresContext, LanguageContext } from "./Contexts";
 
-export default function ModalGeneral({ variant, close, book = {} }) {
+export default function BookModal({ variant, close, book = {} }) {
   let genres = useContext(GenresContext);
   let languages = useContext(LanguageContext);
+  let bookBody = <></>;
   //позже поменять
   const [selectedImage, setSelectedImage] = useState(null);
   const fileInputRef = useRef(null);
   //позже поменятьs
 
   const variantToQueryPair = {
-    Add: async (params) => {
-      var id = await AddData(params);
+    AttachApplicationFile: async (params, id) => {
       if (fileInputRef.current?.files[0] != undefined) {
         const formData = new FormData();
-
         formData.append("file", fileInputRef.current.files[0]);
         params.body = formData;
         await AttachAppFile(params, id);
       }
     },
+
+    Add: async (params) => {
+      var response = await AddData(params);
+      var id = response.result;
+      await variantToQueryPair.AttachApplicationFile(params, id);
+    },
     Remove: DeleteData,
     Edit: async (params) => {
       await UpdateData(params);
-      if (fileInputRef.current?.files[0] != undefined) {
-        const formData = new FormData();
-        formData.append("file", fileInputRef.current.files[0]);
-        console.log(fileInputRef.current.files[0]);
-        params.body = formData;
-        await AttachAppFile(params, params.id);
-      } else if (currentBook.appFile != null) {
-        const formData = new FormData();
-        var curImage = "http://localhost:5157/bookGetFile/" + currentBook.id;
-        formData.append("file", curImage);
-        params.body = formData;
-        await AttachAppFile(params, params.id);
-      }
+      const id = params.id;
+      await variantToQueryPair.AttachApplicationFile(params, id);
     },
   };
 
@@ -51,15 +45,14 @@ export default function ModalGeneral({ variant, close, book = {} }) {
       publicationYear: "",
       genreId: null,
       languageId: null,
-      appFile: null,
-      // imageId: "",
+      appFileId: null,
       rating: 0,
       price: 0,
       description: "",
     };
   }
   const [currentBook, setCurrentBook] = useState(book);
-  console.log("CurBook >>> ", currentBook);
+
   const handleClose = () => {
     close();
   };
@@ -171,7 +164,12 @@ export default function ModalGeneral({ variant, close, book = {} }) {
                 type="file"
                 name="cover"
                 ref={fileInputRef}
-                onChange={formFieldChangeHandler}
+                onChange={() => {
+                  setCurrentBook({
+                    ...currentBook,
+                    imagePlaceHolder: fileInputRef.current?.files[0],
+                  });
+                }}
                 placeholder="Select cover picture"
               />
             )}
@@ -186,7 +184,11 @@ export default function ModalGeneral({ variant, close, book = {} }) {
                 <Button
                   variant="danger"
                   onClick={() => {
-                    setCurrentBook({ ...currentBook, appFile: null });
+                    setCurrentBook({
+                      ...currentBook,
+                      appFile: null,
+                      appFileId: null,
+                    });
                   }}
                 >
                   X
@@ -229,11 +231,19 @@ export default function ModalGeneral({ variant, close, book = {} }) {
       </Form>
     );
     const bookStyle = { position: "fixed", right: "2%", top: "4%" };
-    modalBody = (
-      <Modal.Body className="d-flex">
-        {formFields}
-        <Book book={currentBook} bookStyle={bookStyle} />
-      </Modal.Body>
+    modalBody = <Modal.Body className="d-flex">{formFields}</Modal.Body>;
+    bookBody = (
+      <Modal
+        // size="lg"
+        show={true}
+        onHide={handleClose}
+        backdrop="static"
+        keyboard={true}
+      >
+        <Modal.Body>
+          <Book book={currentBook} bookStyle={bookStyle} />;
+        </Modal.Body>
+      </Modal>
     );
   } else {
     modalBody = (
@@ -245,8 +255,9 @@ export default function ModalGeneral({ variant, close, book = {} }) {
 
   return (
     <>
+      {bookBody}
       <Modal
-        size="lg"
+        // size="lg"
         show={true}
         onHide={handleClose}
         backdrop="static"

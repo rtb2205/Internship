@@ -1,13 +1,8 @@
-﻿using AutoMapper;
-using Azure.Core;
-using Helpers.AutoMapperProfiles;
-using Librarium.Filters;
-using Librarium.Models;
+﻿using Librarium.Models;
 using Librarium.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Librarium.Controllers
 {
@@ -16,52 +11,74 @@ namespace Librarium.Controllers
     public abstract class MyController<T, RequestType, ResponseType, FilterType> : ControllerBase where T : Model where FilterType : class
     {
         protected readonly Service<T, FilterType> _service;
-        
 
         public MyController(Service<T, FilterType> service)
         {
             _service = service;
         }
 
-
         [HttpGet("{id}")]
-        public virtual async Task<ActionResult<T>> Get(string id)
+        public virtual async Task<IActionResult> Get(string id)
         {
-            var result = await _service.Get(id);
+            var result = await _service.Get<ResponseType>(id);
             if (result is null)
-                return NotFound($"{typeof(T).Name} not found.");
-            var newItem = AutoMapperProfile<T, ResponseType>.Transform(result);
-            return Ok(newItem);
+                return NotFound(new { Errors = new { Error = $"{typeof(T).Name} not found." } });
+            //var newItem = AutoMapperProfile<T, ResponseType>.Transform(result);
+            return Ok(result);
         }
 
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public virtual async Task<ActionResult<string?>> Add (RequestType item)
+        public virtual async Task<IActionResult> Add(RequestType item)
         {
-            var newItem = AutoMapperProfile<RequestType, T>.Transform(item);
-            var result = await _service.Add(newItem);
-            return Ok(result);
+            //var newItem = _mapper.Map<T>(item);
+            try
+            {
+                var result = await _service.Add<RequestType>(item);
+                return Ok(new {Result = result});
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Errors = new { Error = ex.Message } });
+            }
         }
 
         [HttpPut("{id}")]
         [Authorize(Roles = "Admin")]
-        public virtual async Task<ActionResult<string?>> Update(string id, RequestType request)
+        public virtual async Task<IActionResult> Update(string id, RequestType request)
         {
-            var newItem = AutoMapperProfile<RequestType, T>.Transform(request);
-            var result = await _service.Update(id, newItem);
-            if (result is null)
-                return NotFound($"{typeof(T).Name} not found.");
-            return Ok(result);
+
+            try
+            {
+                var result = await _service.Update(id, request);
+                if (result is null)
+                    return NotFound(new { Errors = new { Error =  $"{typeof(T).Name} not found." } });
+                return Ok(new { Result = result });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Errors = new { Error = ex.Message } });
+            }
         }
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
-        public virtual async Task<ActionResult<string>> Delete(string id)
+        public virtual async Task<IActionResult> Delete(string id)
         {
-            var result = await _service.Delete(id);
-            if (result is null)
-                return NotFound($"{typeof(T).Name} not found.");
-            return Ok(result);
+            try
+            {
+
+                var result = await _service.Delete(id);
+                if (result is null)
+                    return NotFound($"{typeof(T).Name} not found.");
+                return Ok(new { Result = result });
+            }
+
+            catch (Exception ex)
+            {
+                return BadRequest(new { Errors = new { Error = ex.Message } });
+            }
         }
     }
 }

@@ -8,10 +8,10 @@ import { Initialize } from "./BackEndApi";
 import "./MyPagination.css";
 
 export default function BookShelf() {
-  // const [booksPerPage, setBooksPerPage] = useState(1);
+  
   const [pagesAmount, setPagesAmount] = useState(1);
   const [filteredBooks, setFilteredBooks] = useState([]);
-  // const [curPage, setCurPage] = useState(1);
+  
   const [filter, setFilter] = useState({
     title: "",
     price: "",
@@ -50,7 +50,7 @@ export default function BookShelf() {
 
   let visibleBooks = filteredBooks.map((item) => {
     return (
-      <div className="m-2">
+      <div key={item.id} className="m-2">
         <Book key={item.Id} book={item} />;
       </div>
     );

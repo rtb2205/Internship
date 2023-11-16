@@ -1,4 +1,5 @@
-﻿using Librarium.Data;
+﻿using AutoMapper;
+using Librarium.Data;
 using Librarium.Filters;
 using Librarium.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -9,10 +10,14 @@ namespace Librarium.Services
 {
     public class AppFileService : Service<AppFile, DefaultFilter>
     {
-        public AppFileService(DataContext context) : base(context) { }
+        public AppFileService(DataContext context, IMapper mapper) : base(context, mapper) 
+        {}
 
-        public override async Task<string> SaveInServer(AppFileRequest request, AppFile item)
+        public async Task<string> Add(AppFileRequest request, string ownerId)
         {
+            var item = _mapper.Map<AppFile>(request);
+            item.Name = ownerId + item.Name;
+            await base.Add(item); 
             if (item != null)
             {
                 var uploadPath = item.Path;
@@ -21,16 +26,16 @@ namespace Librarium.Services
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    await request.file.CopyToAsync(stream);
+                    await request.file!.CopyToAsync(stream);
                 }
             }
-            return "";
+            return item!.Id;
         }
 
         public override async Task<string?> Delete(string id)
         {
-            var file = await Get(id);
-            var filePath = file.Path;
+            var file = await Get<AppFile>(id);
+            var filePath = file!.Path;
             var result = await base.Delete(id);
 
             if (File.Exists("./uploads/" + file.Name))

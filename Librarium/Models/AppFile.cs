@@ -4,11 +4,6 @@ namespace Librarium.Models
 {
     public class AppFile: Model
     {
-        public AppFile()
-        {
-            Id = Guid.NewGuid().ToString();
-        }
-
         [Required]
         public string Path { get; set; } = string.Empty;
 

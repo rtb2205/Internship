@@ -1,5 +1,4 @@
-﻿using Azure.Core;
-using Librarium.Data;
+﻿using Librarium.Data;
 using Librarium.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -12,7 +11,7 @@ namespace Librarium.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LoginController: ControllerBase
+    public class LoginController : ControllerBase
     {
         private readonly DataContext _dataContext;
 
@@ -23,16 +22,18 @@ namespace Librarium.Controllers
 
         [HttpPost]
         public async Task<ActionResult<User>> Check(UserRequest userRequest)
-        { 
+        {
+
             var user = _dataContext.Users.FirstOrDefault(el => el.Username == userRequest.Username);
-            if (user is null) {
-                return BadRequest();
+            if (user is null)
+            {
+                return BadRequest(new { Errors = new { Error = "Login or Password is incorrect" } });
             }
 
             var passwordVerification = BCrypt.Net.BCrypt.Verify(userRequest.Password, user.Password);
             if (!passwordVerification)
             {
-                return BadRequest();
+                return BadRequest(new { Errors = new { Error = "Login or Password is incorrect" } });
             }
             string token = CreateToken(user);
             var response = new { AccessToken = token, Username = user.Username, Role = user.Role };
@@ -45,7 +46,7 @@ namespace Librarium.Controllers
             new Claim ( ClaimTypes.Role, user.Role )};
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("mySuperSecretKey_secretkey123!"));
             var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(claims:claims, expires:DateTime.Now.AddDays(1),signingCredentials:cred, audience:"MyAuthClient", issuer:"MyAuthServer");
+            var token = new JwtSecurityToken(claims: claims, expires: DateTime.Now.AddDays(1), signingCredentials: cred, audience: "MyAuthClient", issuer: "MyAuthServer");
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
             return jwt;
         }

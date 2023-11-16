@@ -15,11 +15,21 @@ export default function FilterForm({ filter, setFilter }) {
   }
 
   const genresList = genres.map((item) => {
-    return <option value={item.id}> {item.name}</option>;
+    return (
+      <option key={item.id} value={item.id}>
+        {" "}
+        {item.name}
+      </option>
+    );
   });
 
   const languagesList = languages.map((item) => {
-    return <option value={item.id}> {item.name}</option>;
+    return (
+      <option key={item.id} value={item.id}>
+        {" "}
+        {item.name}
+      </option>
+    );
   });
 
   const [price, setPrice] = useState(0);

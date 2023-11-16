@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
+using AutoMapper;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,7 +25,7 @@ builder.Services.AddSwaggerGen(options =>
 
     options.OperationFilter<Swashbuckle.AspNetCore.Filters.SecurityRequirementsOperationFilter>();
 });
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddDbContext<DataContext>();
 builder.Services.AddTransient<Service<Book, BooksFilter>, BookService>();
 builder.Services.AddTransient<Service<Genre, DefaultFilter>, GenreService>();
@@ -35,7 +36,7 @@ builder.Services.AddTransient<Service<User, DefaultFilter>, UserService>();
 //builder.Services.AddSingleton<IWebHostEnvironment>();
 
 
-//builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllers();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>

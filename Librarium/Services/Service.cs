@@ -1,9 +1,7 @@
-﻿using Helpers.AutoMapperProfiles;
+﻿using AutoMapper;
 using Librarium.Data;
 using Librarium.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting.Internal;
+using AutoMapper;
 
 namespace Librarium.Services
 {
@@ -11,15 +9,20 @@ namespace Librarium.Services
     {
         public DataContext _context;
         public DbSet<T> _dbSet;
+        protected IMapper _mapper;
 
-        public Service(DataContext context)
+        public Service(DataContext context, IMapper mapper)
         {
+            _mapper = mapper;
             _context = context;
             _dbSet = _context.Set<T>();
         }
 
-        public virtual async Task<string?> Add(T item)
+        public virtual async Task<string> Add<RequestType>(RequestType request)
         {
+            var item = _mapper.Map<T>(request);
+            if (item == null)
+                return typeof(T) + "is null";
             _dbSet.Add(item);
             await _context.SaveChangesAsync();
             return item.Id;
@@ -32,20 +35,21 @@ namespace Librarium.Services
                 return null;
             _dbSet.Remove(result);
             await _context.SaveChangesAsync();
-            return id ;
+            return id;
         }
 
-        public virtual async Task<T?> Get(string id)
+        public virtual async Task<ResponseType?> Get<ResponseType>(string id)
         {
             var result = _dbSet.AsQueryable();
             result = ApplyInclude(result);
             if (result is null)
-                return null;
+                return default(ResponseType);
             var temp = await result.FirstOrDefaultAsync(e => e.Id == id);
-            return temp;
+            var newItem = _mapper.Map<ResponseType>(temp);
+            return newItem;
         }
 
-        public virtual async Task<List<T>> GetAll(FilterType? filter = null)
+        public virtual async Task<List<T>> GetAll(FilterType filter)
         {
             var result = _dbSet.AsQueryable();
 
@@ -56,26 +60,10 @@ namespace Librarium.Services
 
         }
 
-        public virtual async Task<string?> Update(string id, T request)
+        public virtual async Task<string> Update<RequestType>(string id, RequestType request)
         {
-            var result = await _dbSet.FindAsync(id);
-            if (result is null)
-                return null;
-
-            var requestType = request.GetType();
-            var resultProperties = typeof(T).GetProperties();
-
-            foreach (var requestProperty in requestType.GetProperties())
-            {
-                var resultProperty = resultProperties.FirstOrDefault(prop => prop.Name == requestProperty.Name);
-                if (resultProperty != null)
-                {
-                    var value = requestProperty.GetValue(request);
-                    if (requestProperty.Name == "Id")
-                        continue;
-                    resultProperty.SetValue(result, value);
-                }
-            }
+            T newItem = await _dbSet.FindAsync(id); 
+            _mapper.Map(request, newItem);
             await _context.SaveChangesAsync();
             return id;
         }
@@ -90,9 +78,5 @@ namespace Librarium.Services
         {
             return await Task.FromResult("");
         }
-
-        public virtual async Task<string> SaveInServer(AppFileRequest request, AppFile item)
-
-        { return await Task.FromResult(""); }
     }
 }

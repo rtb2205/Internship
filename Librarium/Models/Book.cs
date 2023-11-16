@@ -2,12 +2,8 @@
 
 namespace Librarium.Models
 {
-    public class Book: Model
+    public class Book: ModelWithAppFile
     {
-        public Book()
-        {
-            Id = Guid.NewGuid().ToString();
-        }
         [Required]
         public string? Title { get; set; }
         [Required]
@@ -27,8 +23,6 @@ namespace Librarium.Models
         [Required]
         public float Price { get; set; }
 
-        public string? AppFileId { get; set; }
-        public AppFile? AppFile { get; set; }
         [Required]
         public string? Description { get; set; }
     }

@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { Button, Container, Nav, Navbar, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { AddData } from "./BackEndApi";
+import { AddData, GetToastData } from "./BackEndApi";
+import MyToast from "./MyToast";
 
 export default function NaviBar() {
   let navigate = useNavigate();
+  const [toastData, setToastData] = useState({
+    messageText: "Success!!!",
+    variant: "success",
+  });
+
+  const [showToast, setShowToast] = useState(true);
   const [userLoginData, setUserLoginData] = useState({
     username: "",
     password: "",
   });
-  const [isAdmin, setIsAdmin] = useState(
-    localStorage.getItem("admin") === "true"
+  const [isLoggedIn, setIsLoggedIn] = useState(
+    sessionStorage.getItem("AccessToken") != null
   );
 
   async function handleLogIn() {
@@ -19,12 +26,20 @@ export default function NaviBar() {
       body: userLoginData,
     };
     var response = await AddData(params);
-    sessionStorage.setItem("AccessToken", JSON.stringify(response.AccessToken));
+
+    setToastData(GetToastData(response));
+    setShowToast(true);
+
+    if (response.AccessToken != undefined && response.AccessToken != null) {
+      sessionStorage.setItem("AccessToken", response?.AccessToken);
+      setIsLoggedIn(true);
+    }
   }
 
   function handleLogOut() {
-    localStorage.setItem("admin", false);
-    setIsAdmin(false);
+    sessionStorage.clear();
+
+    setIsLoggedIn(false);
     navigate("/");
   }
 
@@ -38,6 +53,13 @@ export default function NaviBar() {
         className="p-2"
       >
         <Container>
+          {
+            <MyToast
+              setShow={setShowToast}
+              show={showToast}
+              toastData={toastData}
+            />
+          }
           <Navbar.Brand>LIBRARY</Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
@@ -45,7 +67,7 @@ export default function NaviBar() {
               <Nav.Link href="/">Главная</Nav.Link>
               {/* <Nav.Link href="/about">О сайте</Nav.Link> */}
               <div>
-                {isAdmin && (
+                {isLoggedIn && (
                   <Nav.Link href="/adminPanel">
                     Администраторская панель{" "}
                   </Nav.Link>
@@ -53,29 +75,29 @@ export default function NaviBar() {
               </div>
             </Nav>
             <Nav className="justify-content-sm-between flex-row align-items-center">
-              {!isAdmin && (
+              {!isLoggedIn && (
                 <>
                   <Form.Control
                     type="username"
                     placeholder="Username..."
-                    onChange={(event) =>
+                    onChange={(event) => {
                       setUserLoginData({
                         ...userLoginData,
                         username: event.target.value,
-                      })
-                    }
-                    className="h-100"
+                      });
+                    }}
+                    className="m-2 h-100"
                   />
                   <Form.Control
                     type="password"
                     placeholder="Password..."
-                    onChange={(event) =>
+                    onChange={(event) => {
                       setUserLoginData({
                         ...userLoginData,
                         password: event.target.value,
-                      })
-                    }
-                    className="h-100"
+                      });
+                    }}
+                    className="m-2 h-100"
                   />
                   <Button
                     variant="primary"
@@ -87,7 +109,7 @@ export default function NaviBar() {
                 </>
               )}
 
-              {isAdmin && (
+              {isLoggedIn && (
                 <Button
                   variant="primary"
                   className="w-100 ms-2"
